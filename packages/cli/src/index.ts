@@ -5,6 +5,7 @@ import { resolve } from 'node:path'
 import { scaffold } from './scaffold.js'
 import { installGstack, printGstackFailureBox } from './gstack.js'
 import { generateEnvFiles } from './env.js'
+import { GSTACK_VERSION } from './constants.js'
 
 const [, , ...args] = process.argv
 
@@ -76,10 +77,10 @@ async function runCreate() {
   const s = spinner()
   s.start('Scaffolding files')
   try {
-    await scaffold({
+    scaffold({
       projectName,
       projectDir,
-      database: database as 'neon' | 'turso',
+      database: database as 'neon' | 'turso', // clack select returns string
       includeTrpc: Boolean(includeTrpc),
       includeStripe: Boolean(includeStripe),
       includeResend: Boolean(includeResend),
@@ -106,7 +107,7 @@ async function runCreate() {
     s.stop(
       gstackResult.method === 'symlink'
         ? 'gstack linked from global install'
-        : `gstack v${(await import('./constants.js')).GSTACK_VERSION} installed`
+        : `gstack v${GSTACK_VERSION} installed`
     )
   } else {
     s.stop('gstack installation failed (continuing)')

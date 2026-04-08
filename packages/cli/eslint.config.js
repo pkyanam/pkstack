@@ -4,7 +4,9 @@ import tseslint from 'typescript-eslint'
 export default tseslint.config(...baseConfig, {
   languageOptions: {
     parserOptions: {
-      projectService: true,
+      projectService: {
+        allowDefaultProject: ['src/__tests__/*.ts'],
+      },
       tsconfigRootDir: import.meta.dirname,
     },
   },

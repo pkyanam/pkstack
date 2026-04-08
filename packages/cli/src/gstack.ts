@@ -25,7 +25,7 @@ export async function installGstack(projectDir: string): Promise<GstackInstallRe
       }
       symlinkSync(GSTACK_GLOBAL_DIR, installDir)
       return { success: true, method: 'symlink' }
-    } catch (err) {
+    } catch {
       // Symlink failed, fall through to download
     }
   }
@@ -41,8 +41,9 @@ export async function installGstack(projectDir: string): Promise<GstackInstallRe
     }
 
     // Stream tarball directly into the install dir
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const tarStream = tar.extract({ cwd: installDir, strip: 1 })
-    await pipeline(response.body as unknown as NodeJS.ReadableStream, createGunzip(), tarStream)
+    await pipeline(response.body as unknown as NodeJS.ReadableStream, createGunzip(), tarStream as NodeJS.WritableStream)
 
     return { success: true, method: 'download' }
   } catch (err) {

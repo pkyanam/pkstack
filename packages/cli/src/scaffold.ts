@@ -37,7 +37,7 @@ const RESEND_PATHS = [
   'src/lib/email.ts',
 ]
 
-export async function scaffold(opts: ScaffoldOptions): Promise<void> {
+export function scaffold(opts: ScaffoldOptions): void {
   const { projectName, projectDir, database, includeTrpc, includeStripe, includeResend } = opts
 
   if (existsSync(projectDir)) {
