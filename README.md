@@ -1,0 +1,92 @@
+# pkstack
+
+**T3 Stack was 2022 thinking. pkstack is the 2026 stack.**
+
+The first TypeScript starter kit designed from first principles for **human + AI agent co-development**. Not "AI features in your app" — AI agents *working on* your app, from day one.
+
+```bash
+npm create pkstack my-app
+```
+
+---
+
+## What you get
+
+Every scaffolded project ships with:
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Next.js 15 (App Router, RSC) |
+| Language | TypeScript 5 strict + `noUncheckedIndexedAccess` |
+| Styling | Tailwind v4 + shadcn/ui |
+| ORM | Drizzle (typesafe, SQL-native) |
+| Database | Docker Compose (Postgres) → Neon in prod |
+| Auth | Better Auth (self-hosted) |
+| API | tRPC v11 (App Router pattern) |
+| AI | Vercel AI SDK (provider-agnostic) |
+| Payments | Stripe (optional) |
+| Email | Resend (optional) |
+| Agent Workflow | **gstack pre-wired (12+ AI skills)** |
+
+## Why it's different
+
+```
+Every other starter kit:    pkstack:
+─────────────────────────   ──────────────────────────────
+Human-first codebase        Human+agent co-designed
+AGENTS.md as afterthought   AGENTS.md as required schema
+No workflow toolchain       gstack pre-wired (12+ skills)
+Agent drifts on changes     Agent reads AGENTS.md, stays on track
+You configure AI tools      AI tools already configured
+```
+
+## Quickstart
+
+```bash
+npm create pkstack my-app
+
+cd my-app
+cp .env.example .env.local    # fill in your values
+docker compose up -d          # start local Postgres
+npm install
+npm run dev
+```
+
+## AI agent workflow
+
+Once scaffolded, Claude Code has 12+ skills available:
+
+```
+/review    — review a PR before merging
+/ship      — cut a release
+/qa        — QA test the running app
+/browse    — headless browser for dogfooding
+/investigate — debug an error
+/office-hours — YC-style founder session
+```
+
+## Project structure
+
+```
+my-app/
+├── src/
+│   ├── app/              # Next.js App Router
+│   ├── components/       # shadcn/ui + typed variants exports
+│   ├── db/
+│   │   ├── schema.ts     # your app tables
+│   │   └── auth-schema.ts  # Better Auth tables (DO NOT EDIT)
+│   ├── server/api/       # tRPC v11 routers
+│   └── lib/auth.ts       # Better Auth instance
+├── scripts/check-env.ts  # pre-dev env validation
+├── docker-compose.yml    # local Postgres
+├── AGENTS.md             # agent contract (required)
+└── CLAUDE.md             # Claude Code config
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+---
+
+*Built with Claude Code, reviewed with gstack.*

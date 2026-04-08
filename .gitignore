@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# build outputs
+dist/
+.next/
+out/
+build/
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# turbo
+.turbo/
+
+# testing
+coverage/
+*.lcov
+
+# misc
+.DS_Store
+*.pem
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# gstack (installed per-contributor)
+.claude/skills/gstack/
+scripts/setup-gstack.sh
+
+# editors
+.vscode/
+.idea/
+*.swp
+*.swo

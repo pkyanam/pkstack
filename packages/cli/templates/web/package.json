@@ -1,0 +1,48 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx scripts/check-env.ts && next dev --turbopack",
+    "build": "tsx scripts/check-env.ts && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:auth-generate": "auth generate && drizzle-kit generate"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.9",
+    "ai": "^4.3.15",
+    "better-auth": "^1.2.7",
+    "drizzle-orm": "^0.41.0",
+    "next": "^15.2.4",
+    "postgres": "^3.4.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "@trpc/client": "^11.1.0",
+    "@trpc/react-query": "^11.1.0",
+    "@trpc/server": "^11.1.0",
+    "@tanstack/react-query": "^5.70.0",
+    "superjson": "^2.2.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@pkstack/config": "*",
+    "@types/node": "^22.13.14",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "drizzle-kit": "^0.30.5",
+    "eslint": "^9.23.0",
+    "eslint-config-next": "^15.2.4",
+    "tailwindcss": "^4.1.3",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "optionalDependencies": {
+    "stripe": "^17.7.0",
+    "resend": "^4.2.0"
+  }
+}

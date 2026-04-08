@@ -1,0 +1,37 @@
+{
+  "name": "@pkstack/config",
+  "version": "0.1.0",
+  "description": "Shared tsconfig, eslint, and tailwind presets for pkstack projects",
+  "license": "MIT",
+  "main": "./eslint.config.js",
+  "exports": {
+    "./eslint": "./eslint.config.js",
+    "./tailwind": "./tailwind.preset.js",
+    "./tsconfig/base": "./tsconfig/base.json",
+    "./tsconfig/nextjs": "./tsconfig/nextjs.json",
+    "./tsconfig/node": "./tsconfig/node.json"
+  },
+  "files": [
+    "tsconfig/",
+    "eslint.config.js",
+    "tailwind.preset.js"
+  ],
+  "scripts": {
+    "lint": "echo 'no lint step for config package'"
+  },
+  "peerDependencies": {
+    "@eslint/js": ">=9",
+    "eslint": ">=9",
+    "tailwindcss": ">=4",
+    "typescript": ">=5",
+    "typescript-eslint": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
