@@ -16,7 +16,7 @@ afterEach(() => {
 
 describe('sanitizeName', () => {
   it('lowercases and strips special chars', () => {
-    expect(sanitizeName('My App!')).toBe('my-app-')
+    expect(sanitizeName('My App!')).toBe('my-app')
   })
   it('falls back to my-app for empty input', () => {
     expect(sanitizeName('')).toBe('my-app')
