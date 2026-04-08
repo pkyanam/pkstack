@@ -2,8 +2,7 @@ import { existsSync, mkdirSync, symlinkSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream/promises'
 import { createGunzip } from 'node:zlib'
-// @ts-expect-error — tar has no bundled types; @types/tar is a devDependency
-import tar from 'tar'
+import { extract } from 'tar'
 import { GSTACK_GLOBAL_DIR, GSTACK_INSTALL_SUBDIR, GSTACK_TARBALL_URL, GSTACK_VERSION } from './constants.js'
 
 export interface GstackInstallResult {
@@ -41,9 +40,8 @@ export async function installGstack(projectDir: string): Promise<GstackInstallRe
     }
 
     // Stream tarball directly into the install dir
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    const tarStream = tar.extract({ cwd: installDir, strip: 1 })
-    await pipeline(response.body as unknown as NodeJS.ReadableStream, createGunzip(), tarStream as NodeJS.WritableStream)
+    const tarStream = extract({ cwd: installDir, strip: 1 })
+    await pipeline(response.body as unknown as NodeJS.ReadableStream, createGunzip(), tarStream)
 
     return { success: true, method: 'download' }
   } catch (err) {
