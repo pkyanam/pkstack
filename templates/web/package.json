@@ -2,6 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "tsx scripts/check-env.ts && next dev --turbopack",
     "build": "tsx scripts/check-env.ts && next build",

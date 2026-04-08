@@ -3,12 +3,12 @@
 import { QueryClientProvider } from '@tanstack/react-query'
 import { createTRPCClient, httpBatchStreamLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
-import { type ReactNode, useState } from 'react'
+import { useState } from 'react'
+import type { ReactNode } from 'react'
 import superjson from 'superjson'
 import { getQueryClient } from './query-client'
-import { type AppRouter } from './root'
+import type { AppRouter } from './root'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const trpc: ReturnType<typeof createTRPCReact<AppRouter>> = createTRPCReact<AppRouter>()
 
 function getBaseUrl() {
