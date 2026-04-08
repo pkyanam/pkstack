@@ -8,7 +8,8 @@ import superjson from 'superjson'
 import { getQueryClient } from './query-client'
 import { type AppRouter } from './root'
 
-export const trpc = createTRPCReact<AppRouter>()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const trpc: ReturnType<typeof createTRPCReact<AppRouter>> = createTRPCReact<AppRouter>()
 
 function getBaseUrl() {
   if (typeof window !== 'undefined') return ''
