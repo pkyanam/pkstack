@@ -104,7 +104,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npm run build -w packages/cli -w packages/config
 
       - name: Publish create-pkstack
         run: npm publish --access public -w packages/cli
