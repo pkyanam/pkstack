@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { existsSync, mkdirSync, rmSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { scaffold, sanitizeName } from '../scaffold.js'
@@ -24,10 +24,10 @@ describe('sanitizeName', () => {
 })
 
 describe('scaffold', () => {
-  it('happy path: web + all defaults → files exist, package.json name correct', async () => {
+  it('happy path: web + all defaults → files exist, package.json name correct', () => {
     const dir = tempDir('defaults')
     mkdirSync(TMP, { recursive: true })
-    await scaffold({
+    scaffold({
       projectName: 'test-app',
       projectDir: dir,
       database: 'neon',
@@ -41,14 +41,14 @@ describe('scaffold', () => {
     expect(existsSync(join(dir, 'docker-compose.yml'))).toBe(true)
     expect(existsSync(join(dir, 'AGENTS.md'))).toBe(true)
 
-    const pkg = JSON.parse(require('node:fs').readFileSync(join(dir, 'package.json'), 'utf8'))
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8')) as { name: string }
     expect(pkg.name).toBe('test-app')
   })
 
-  it('tRPC excluded → no src/server/ directory', async () => {
+  it('tRPC excluded → no src/server/ directory', () => {
     const dir = tempDir('no-trpc')
     mkdirSync(TMP, { recursive: true })
-    await scaffold({
+    scaffold({
       projectName: 'test-no-trpc',
       projectDir: dir,
       database: 'neon',
@@ -59,10 +59,10 @@ describe('scaffold', () => {
     expect(existsSync(join(dir, 'src/server'))).toBe(false)
   })
 
-  it('duplicate directory → throws, no overwrite', async () => {
+  it('duplicate directory → throws, no overwrite', () => {
     const dir = tempDir('dup')
     mkdirSync(dir, { recursive: true })
-    await expect(
+    expect(() =>
       scaffold({
         projectName: 'dup',
         projectDir: dir,
@@ -71,19 +71,14 @@ describe('scaffold', () => {
         includeStripe: false,
         includeResend: false,
       })
-    ).rejects.toThrow('already exists')
+    ).toThrow('already exists')
   })
 
-  it('partial failure → output directory removed', async () => {
+  it('partial failure → output directory removed', () => {
     const dir = tempDir('partial-fail')
-    mkdirSync(TMP, { recursive: true })
-    // Intentionally pass a bad TEMPLATE_DIR by pointing to non-existent path
-    // We test cleanup by catching the thrown error
-    // (Real failure test would mock the copy step)
-    // Here we just verify the duplicate check cleanup path works
     mkdirSync(dir, { recursive: true })
-    try {
-      await scaffold({
+    expect(() =>
+      scaffold({
         projectName: 'partial-fail',
         projectDir: dir,
         database: 'neon',
@@ -91,11 +86,6 @@ describe('scaffold', () => {
         includeStripe: false,
         includeResend: false,
       })
-    } catch {
-      // Expected — dir existed
-    }
-    // Dir still exists because we created it, not the scaffold
-    // Cleanup of scaffold-created dirs is tested by verifying
-    // the 'already exists' throw doesn't leave partial state
+    ).toThrow()
   })
 })

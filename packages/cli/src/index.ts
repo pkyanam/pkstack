@@ -80,7 +80,8 @@ async function runCreate() {
     scaffold({
       projectName,
       projectDir,
-      database: database as 'neon' | 'turso', // clack select returns string
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      database: database as 'neon' | 'turso',
       includeTrpc: Boolean(includeTrpc),
       includeStripe: Boolean(includeStripe),
       includeResend: Boolean(includeResend),
