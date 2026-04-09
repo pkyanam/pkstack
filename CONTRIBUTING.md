@@ -1,10 +1,21 @@
 # Contributing to pkstack
 
+## What you are contributing to
+
+pkstack is not just a Next.js template. It is a scaffold system:
+
+1. shared published packages
+2. source-of-truth templates
+3. the CLI that copies and edits those templates
+4. reference apps/docs that validate the shape of the system
+
+The fastest way to break pkstack is to change one layer without understanding the layer above or below it.
+
 ## Prerequisites
 
-- Node.js >= 18.18
-- npm >= 10
-- Docker (for local Postgres when testing the template)
+- Node.js `>=18.18`
+- npm `>=10`
+- Docker for local Postgres testing of the web scaffold
 
 ## Setup
 
@@ -12,114 +23,137 @@
 git clone https://github.com/pkyanam/pkstack
 cd pkstack
 npm install
-
-# Install gstack (AI agent workflow toolchain — gitignored)
 ./scripts/setup-gstack.sh
 ```
 
-## Repo structure
+## Repo map
 
-| Path | What it is |
-|------|-----------|
-| `packages/cli/` | `create-pkstack` binary. Source of CLI prompts, file generation, gstack install. |
-| `packages/config/` | `@pkstack/config` — shared tsconfig/eslint/tailwind presets. |
-| `packages/ui/`, `db/`, `auth/`, `ai/`, `api/` | Stage 2 runtime packages consumed by the templates/apps. |
-| `templates/web/` | **Source of truth** for the web scaffold output. Must always compile and build. |
-| `templates/mobile/` | **Source of truth** for the mobile scaffold output. |
-| `apps/mobile/` | In-repo Expo reference app. |
-| `apps/docs/` | Mintlify-format docs site. |
+| Path | Role |
+|------|------|
+| `packages/cli/` | `create-pkstack` binary and scaffold logic |
+| `packages/config/` | shared tsconfig, ESLint, Tailwind, and lint rules |
+| `packages/ui/`, `db/`, `auth/`, `ai/`, `api/` | shared published runtime packages |
+| `templates/web/` | source-of-truth Next.js scaffold |
+| `templates/mobile/` | source-of-truth Expo scaffold |
+| `apps/mobile/` | reference Expo app |
+| `apps/docs/` | Mintlify docs content that will be deployed to Vercel |
 
-## Key rules
+## The rule that matters most
 
-### Templates are the source of truth
+### Templates are the scaffold source of truth
 
-Every change to scaffold output must be made in `templates/web/` or `templates/mobile/`, then validated via the built CLI. After editing the web template:
+If a generated app file should change, edit `templates/web` or `templates/mobile`.
+
+If behavior depends on scaffold choices, edit `packages/cli/src/scaffold.ts`.
+
+If shared runtime ownership changes, edit `packages/*`.
+
+Do not author changes directly in `packages/cli/templates/*`. Those files are build artifacts copied from `templates/*`.
+
+## Recommended development loop
+
+### 1. Make the change in the right layer
+
+- package ownership change -> `packages/*`
+- generated app structure change -> `templates/*`
+- conditional scaffold behavior change -> `packages/cli/src/scaffold.ts`
+- docs/reference-only change -> `apps/*`
+
+### 2. Validate the repo
+
+```bash
+npm run build
+npm run lint
+npm run typecheck
+npm test
+```
+
+### 3. Validate the actual generated output
+
+```bash
+npm run build -w packages/cli
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-mobile --mobile
+```
+
+Then verify the generated apps inside those temporary directories.
+
+## Web template checks
 
 ```bash
 cd templates/web
-npx tsc --noEmit     # must pass
+npx tsc --noEmit
+SKIP_ENV_VALIDATION=true \
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/testdb \
 BETTER_AUTH_SECRET=test-secret-for-ci-only-not-real \
 BETTER_AUTH_URL=http://localhost:3000 \
 npx next build
 ```
 
-CI will run both checks on every PR.
-
-For the mobile template:
+## Mobile template checks
 
 ```bash
 cd templates/mobile
+npm run typecheck
+CI=1 npx expo prebuild --no-install
+```
+
+## Fresh scaffold checks
+
+For a generated web app:
+
+```bash
+npm install
+npm run typecheck
+npm run build
+```
+
+For a generated mobile app:
+
+```bash
 npm install
 npm run typecheck
 CI=1 npx expo prebuild --no-install
 ```
 
-### Dependency policy
+## Dependency policy
 
-The scaffolded app uses exact dependency versions, not caret ranges and never `"*"`.
-When updating framework or library versions, treat it as a curated compatibility set:
-update the template, rebuild the bundled CLI template, and verify a real generated app
-with `npm install`, `npm run typecheck`, and `npm run build`.
+- use exact versions in scaffold output
+- treat version changes as a curated compatibility set
+- do not casually loosen ranges in templates
+- if a package is shared across scaffolded apps, prefer package ownership over copy-paste
 
-### Conditional template features
+## Documentation policy
 
-Features that are optional (tRPC, Stripe, Resend, mobile template selection) are handled in `packages/cli/src/scaffold.ts`. Do not gate scaffold variants inside the templates with app-time checks. Gate them in the CLI scaffold logic.
+The repo docs should explain pkstack end to end:
 
-### Testing the CLI locally
+- what is published
+- what is scaffolded
+- what is source of truth
+- what is reference-only
+- what is already shipped
+- what is still planned
 
-```bash
-# Build the CLI
-npm run build -w packages/cli
+Current planned platform step:
 
-# For unpublished Stage 2 packages, rewrite @pkstack/* deps to local file: paths
-PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
-PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-mobile --mobile
-```
+- deploy the docs site through Mintlify
+- use `pkstack.preetham.org` as the initial custom domain
 
-### GSTACK_VERSION
+## Release flow
 
-`packages/cli/src/constants.ts` pins the gstack version. To bump it:
-
-1. Check the latest gstack release tag on GitHub
-2. Update `GSTACK_VERSION` in `constants.ts`
-3. Open a PR titled `chore: bump gstack to vX.Y.Z`
-4. Include the gstack release notes in the PR body
-
-### AGENTS.md
-
-Every package, app, and template must have an `AGENTS.md` with these four H2 headings:
-
-```markdown
-## Purpose
-## Public API
-## Do Not Modify
-## Common Agent Mistakes
-```
-
-This is enforced by the lint pipeline.
-
-## CI
-
-PRs run:
-- `test-cli` — builds and unit-tests the CLI on Node 18/20/22 × macOS/Ubuntu
-- `test-template` — scaffolds to a temp dir, runs `tsc --noEmit` + `next build`
-
-Both must pass before merging.
-
-## Releases
-
-Releases are cut from `main` using a semver tag:
+Releases are cut from `main` with a semver tag:
 
 ```bash
 git tag vX.Y.Z
-git push origin vX.Y.Z
+git push origin main --tags
 ```
 
-The publish flow now needs to cover `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages.
+GitHub Actions publishes npm packages from the tag workflow.
 
-Current release-prep target:
+## Common mistakes
 
-- Codebase version: `0.2.0`
-- Git tag to push: `v0.2.0`
-- Remaining release blockers: npm publish for Stage 2 packages and docs deployment/domain choice
+1. Editing `packages/cli/templates/*` instead of `templates/*`
+2. Putting conditional logic into templates instead of the CLI
+3. Duplicating package-owned runtime code back into the templates
+4. Validating only the monorepo and not a fresh scaffold
+5. Documenting future plans as already shipped

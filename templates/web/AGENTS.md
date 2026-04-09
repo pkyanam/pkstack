@@ -2,33 +2,31 @@
 
 ## Purpose
 
-Source-of-truth Next.js 15 template for `npm create pkstack`. The CLI copies this template, then generates env files and strips optional features. Every change here must pass `tsc --noEmit` and `next build`.
+Source-of-truth Next.js web scaffold for pkstack.
+
+This template owns app structure and app-specific wiring for the generated web app.
+
+It consumes published pkstack packages instead of embedding shared runtime code inline.
 
 ## Public API
 
-This template is not a published package — it is the scaffold output. The "API" is the file structure and conventions that the CLI copies:
-
-- **`src/db/schema.ts`** — app Drizzle tables (edit to add your own tables)
-- **`src/db/auth-schema.ts`** — local re-export of the `@pkstack/auth` schema contract for Drizzle migrations
-- **`src/db/index.ts`** — exports `db` (Drizzle instance wired via `@pkstack/db`)
-- **`src/lib/auth.ts`** — exports `auth` (Better Auth instance wired via `@pkstack/auth`)
-- **`src/lib/ai.ts`** — app-owned AI entry point that re-exports shared `@pkstack/ai` helpers
-- **`src/lib/email.ts`** — exports `sendTransactionalEmail` (Resend helper, optional scaffold output)
-- **`src/server/api/trpc.ts`** — exports `createTRPCRouter`, `publicProcedure`, `protectedProcedure`
-- **`src/server/api/root.ts`** — exports `appRouter` and `AppRouter` type
-- **`src/server/api/server.ts`** — exports `api` for RSC server-side tRPC calls
-- **`src/server/api/provider.tsx`** — exports `TRPCProvider` and `trpc` client
-- **`src/app/api/webhooks/stripe/route.ts`** — Stripe webhook starter route (optional scaffold output)
-- **`scripts/check-env.ts`** — validates required env vars before dev/build
+- **`src/db/schema.ts`** — app-owned Drizzle tables
+- **`src/db/auth-schema.ts`** — re-export of the shared auth schema contract
+- **`src/db/index.ts`** — app db wiring using `@pkstack/db`
+- **`src/lib/auth.ts`** — app auth wiring using `@pkstack/auth`
+- **`src/lib/ai.ts`** — app AI entry point built on `@pkstack/ai`
+- **`src/server/api/*`** — app-owned tRPC implementation
+- **`src/app/*`** — Next.js routes and UI composition
+- **`scripts/check-env.ts`** — env validation before dev/build
 
 ## Do Not Modify
 
-- **`src/db/auth-schema.ts`** — keep this as a thin re-export of `@pkstack/auth`. The schema contract now lives in the package.
-- The tRPC/React Query setup pattern in `query-client.ts` and `provider.tsx` — it follows the official tRPC App Router setup guide exactly. Deviating causes hydration mismatches.
-- The `scripts/check-env.ts` exit codes — exit 0 = ok, exit 1 = missing vars. The npm `dev`/`build` scripts depend on this behavior.
+- Keep shared runtime concerns in packages, not reimplemented locally.
+- Keep `src/db/auth-schema.ts` as a thin shared-schema re-export.
+- Keep `scripts/check-env.ts` behavior compatible with the npm `dev` and `build` scripts.
 
 ## Common Agent Mistakes
 
-1. **Re-implementing package-owned runtime code locally** — auth, db helpers, API contracts, UI primitives, and AI wrappers should come from `@pkstack/*`, not copied into this app.
-2. **Importing from `src/server/api/server.ts` in Client Components** — `server.ts` is RSC-only (it imports `server-only`). Use the `trpc` client from `provider.tsx` in Client Components instead.
-3. **Skipping the migration step after schema changes** — after editing `schema.ts`, you must run `npm run db:generate` then `npm run db:migrate`. Skipping generates TypeScript errors that look like schema mismatches.
+1. **Moving package-owned runtime code back into the app** — use `@pkstack/*`.
+2. **Changing scaffold structure only in bundled CLI copies** — edit this source template instead.
+3. **Forgetting the app/package split** — app schema and feature logic stay here; reusable runtime stays in packages.

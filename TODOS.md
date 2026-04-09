@@ -1,6 +1,6 @@
 # TODOS
 
-## v0.2.0 shipped in-repo
+## v0.2.0 completed
 
 - [x] Extract `@pkstack/ui`, `@pkstack/db`, `@pkstack/auth`, `@pkstack/ai`, and `@pkstack/api`
 - [x] Rewire `templates/web` to consume the extracted packages
@@ -9,17 +9,16 @@
 - [x] Add `apps/docs/` Mintlify content site
 - [x] Move the ESLint `require-variants` rule into `@pkstack/config`
 - [x] Add Playwright scaffold E2E coverage
-- [x] Verify repo build/lint/typecheck/test plus fresh web/mobile scaffolds
+- [x] Publish `create-pkstack`, `@pkstack/config`, and the Stage 2 runtime packages
 
-## Still open before a public v0.2 release
+## Next step
 
-- [ ] Publish `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages to npm
-- [ ] Decide the docs hostname and deploy `apps/docs`
-- [ ] Confirm `NPM_TOKEN` and any docs-hosting secrets are configured in GitHub Actions
-- [ ] Smoke-test install from the published packages instead of local workspace overrides
+- [ ] Publish the docs site through Mintlify
+- [ ] Point `pkstack.preetham.org` at the deployed docs site
+- [ ] Smoke-test the published npm flow from a clean external directory
 
-## Next-agent cleanup
+## Follow-up cleanup
 
-- [ ] Remove the Mint React dedupe workaround if a Mint release makes it unnecessary
-- [ ] Review whether the root `overrides` block is still needed after the next Mint upgrade
-- [ ] Triage remaining non-blocking Expo warnings from `expo prebuild`
+- [ ] Remove the Mint React workaround if a newer Mint release makes it unnecessary
+- [ ] Revisit the root `overrides` block after the next Mint upgrade
+- [ ] Decide whether `apps/docs` stays Mint-only or gets a small production deployment wrapper

@@ -2,17 +2,25 @@
 
 ## What this is
 
-The Mintlify docs app for pkstack. The final hostname is still undecided.
+The Mintlify docs content for pkstack.
+
+It currently supports:
+
+- local preview via `mint dev`
+- content validation via `npm run build`
+
+It does not yet represent a finished public deployment path by itself. The planned public host is `pkstack.preetham.org` through Mintlify.
 
 ## Common tasks
 
 ```bash
-npm install
 npm run dev
 npm run build
 ```
 
-## Conventions
+## Documentation rules
 
-- Prefer documenting current reality over aspirational roadmap statements.
-- Keep package boundaries and verification notes explicit.
+- explain pkstack from top to bottom, not page-by-page in isolation
+- distinguish published packages from source-of-truth templates
+- distinguish templates from reference apps
+- keep the docs deployment plan explicit: Mintlify + `pkstack.preetham.org`

@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -15,11 +15,11 @@
     "db:auth-generate": "auth generate && drizzle-kit generate"
   },
   "dependencies": {
-    "@pkstack/ai": "0.2.0",
-    "@pkstack/api": "0.2.0",
-    "@pkstack/auth": "0.2.0",
-    "@pkstack/db": "0.2.0",
-    "@pkstack/ui": "0.2.0",
+    "@pkstack/ai": "0.2.1",
+    "@pkstack/api": "0.2.1",
+    "@pkstack/auth": "0.2.1",
+    "@pkstack/db": "0.2.1",
+    "@pkstack/ui": "0.2.1",
     "@tanstack/react-query": "5.96.2",
     "@trpc/client": "11.16.0",
     "@trpc/react-query": "11.16.0",
@@ -35,7 +35,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@pkstack/config": "0.2.0",
+    "@pkstack/config": "0.2.1",
     "@next/eslint-plugin-next": "15.5.15",
     "@types/node": "22.19.17",
     "@types/react": "19.2.14",

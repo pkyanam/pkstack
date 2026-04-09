@@ -1,0 +1,59 @@
+---
+title: Architecture
+description: How the pkstack monorepo is organized from top to bottom.
+---
+
+# Architecture
+
+pkstack works as a layered system.
+
+## Layer 1: published packages
+
+`packages/*` own reusable code:
+
+- `@pkstack/ui`
+- `@pkstack/db`
+- `@pkstack/auth`
+- `@pkstack/ai`
+- `@pkstack/api`
+- `@pkstack/config`
+
+These packages define what should be shared across scaffolded apps.
+
+## Layer 2: source-of-truth templates
+
+`templates/web` and `templates/mobile` define the files a new app starts with.
+
+Templates own app structure and app wiring.
+
+Packages own reusable runtime and contracts.
+
+## Layer 3: CLI
+
+`packages/cli` turns templates into a real generated app.
+
+It is responsible for:
+
+- copying the chosen template
+- removing optional files when a feature is not selected
+- generating `.env.example` and `.env.local` for web apps
+- bundling template copies for the published CLI package
+
+## Layer 4: generated app
+
+The generated app depends on published pkstack packages.
+
+That means:
+
+- shared runtime code is versioned independently
+- generated apps stay smaller and clearer
+- package boundaries stay visible to humans and agents
+
+## Reference apps
+
+`apps/mobile` and `apps/docs` are not scaffold sources.
+
+They exist to validate and explain the system:
+
+- `apps/mobile` is the in-repo Expo reference app
+- `apps/docs` is the Mintlify docs content that will be published to Vercel

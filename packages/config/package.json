@@ -1,6 +1,6 @@
 {
   "name": "@pkstack/config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared tsconfig, eslint, and tailwind presets for pkstack projects",
   "license": "MIT",
   "type": "module",

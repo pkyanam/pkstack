@@ -11,11 +11,11 @@
     "groups": [
       {
         "group": "Overview",
-        "pages": ["index", "stage-2"]
+        "pages": ["index", "getting-started", "architecture", "scaffold-flow"]
       },
       {
         "group": "Reference",
-        "pages": ["packages"]
+        "pages": ["packages", "stage-2", "deployment"]
       }
     ]
   }

@@ -1,30 +1,41 @@
 ---
-title: Stage 2
-description: Package extraction and the v0.2 delivery scope.
+title: Release State
+description: What shipped in v0.2.0 and what comes next.
 ---
 
-# Stage 2
+# Release State
 
-Stage 2 turns the starter conventions into reusable packages instead of leaving them trapped inside the web template.
+`v0.2.0` is the package extraction release.
 
-## Package boundaries
+## What shipped
 
-- `@pkstack/ui` owns shared React components and typed `*Variants` exports.
-- `@pkstack/db` owns Drizzle client creation, schema merging, and migration config helpers.
-- `@pkstack/auth` owns Better Auth wiring plus the auth schema contract.
-- `@pkstack/ai` owns AI SDK wrappers and AgentKit helpers.
-- `@pkstack/api` owns plain TypeScript and zod API contracts.
+- published `create-pkstack`
+- published `@pkstack/config`
+- published `@pkstack/ui`
+- published `@pkstack/db`
+- published `@pkstack/auth`
+- published `@pkstack/ai`
+- published `@pkstack/api`
+- web and mobile source-of-truth templates
+- Expo reference app
+- Mintlify docs content
+- Playwright scaffold E2E coverage
 
-## Deliverables
+## What the release changed
 
-- Web template rewired to import the extracted packages
-- Expo mobile template and in-repo reference app
-- Mintlify docs site content
-- Playwright E2E coverage for a generated web app
+Before `v0.2.0`, core runtime pieces lived mostly inside the web template.
 
-## Current gap to a public release
+After `v0.2.0`:
 
-The code deliverables are complete for `v0.2.0`, but the public release is not fully closed out yet:
+- shared runtime code lives in packages
+- templates stay thinner and more app-owned
+- the CLI scaffolds apps that depend on published pkstack packages
 
-- the Stage 2 packages still need to be published to npm
-- the docs app still needs a deployed hostname
+## What is next
+
+The next public-facing step is not another package feature.
+
+It is deployment:
+
+- publish the docs site through Mintlify
+- point `pkstack.preetham.org` at that site

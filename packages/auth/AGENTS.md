@@ -2,24 +2,26 @@
 
 ## Purpose
 
-Shared Better Auth wiring for pkstack apps. This package owns the auth schema contract and helpers for creating auth instances and route handlers.
+`@pkstack/auth` owns the shared Better Auth contract for pkstack apps.
+
+It exists to keep auth schema and auth helper wiring consistent across scaffolded apps without taking over the app’s database instance or feature logic.
 
 ## Public API
 
-- **`createAuth({ db, ...options })`** — create a Better Auth instance backed by Drizzle
-- **`getSession(auth, headers)`** — resolve the current session from request headers
-- **`authMiddleware(auth)`** — create Next.js auth route handlers from an auth instance
-- **`createAuthRouteHandlers(auth)`** — alias for `authMiddleware`
-- **`authSchema`** — Better Auth Drizzle schema module
+- **`authSchema`** — Better Auth Drizzle schema contract
+- **`createAuth({ db, ...options })`** — build a Better Auth instance
+- **`getSession(auth, headers)`** — session helper
+- **`authMiddleware(auth)`** — route-handler helper
+- **`createAuthRouteHandlers(auth)`** — alias for route-handler creation
 
 ## Do Not Modify
 
-- `authSchema` is the ownership boundary for auth tables. Do not move it into `@pkstack/db`.
-- This package must not create the database client. Apps pass `db` in explicitly.
-- Keep exports framework-light. Avoid adding UI or app-specific behavior here.
+- `authSchema` ownership stays here.
+- This package must not own the db client.
+- Keep exports focused on shared auth wiring, not app-specific policies or UI.
 
 ## Common Agent Mistakes
 
-1. **Importing the app db client into this package** — that reverses the package boundary and creates cycles.
-2. **Adding business logic to `createAuth`** — this package only wires Better Auth, not app roles or profile logic.
-3. **Editing the auth schema in app code** — update the package export instead so every app consumes one contract.
+1. **Importing app db code into this package** — apps pass in `db`; this package should not reach back into app code.
+2. **Moving auth tables into `@pkstack/db`** — that breaks the intended boundary.
+3. **Putting profile, role, or business logic into auth helpers** — keep those concerns app-owned.

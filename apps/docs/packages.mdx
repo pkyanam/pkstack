@@ -1,36 +1,88 @@
 ---
 title: Packages
-description: The pkstack package surface in the repo and release pipeline.
+description: The published pkstack package surface and ownership boundaries.
 ---
 
 # Packages
 
-## Runtime packages
+pkstack is built around explicit package ownership.
 
-### `@pkstack/ui`
+## `@pkstack/ui`
 
-Shared React components with typed variants exports for agent readability.
+Owns shared React UI primitives.
 
-### `@pkstack/db`
+Examples:
 
-Drizzle client creation, schema merging, and migration config helpers.
+- `Button`
+- `buttonVariants`
+- `cn`
 
-### `@pkstack/auth`
+This package owns reusable presentation primitives, not app state or business logic.
 
-Better Auth factory helpers and the auth schema definition.
+## `@pkstack/db`
 
-### `@pkstack/ai`
+Owns shared database helpers.
 
-Vercel AI SDK wrappers and AgentKit helpers.
+Examples:
 
-### `@pkstack/api`
+- `createDb`
+- `createPostgresClient`
+- `mergeSchemas`
+- Drizzle config helpers
 
-Plain TypeScript contracts for shared API inputs and outputs.
+This package owns database wiring, not the auth schema definition.
 
-These packages are versioned at `0.2.0` in the monorepo. Publishing them to npm is a separate release step that is still pending.
+## `@pkstack/auth`
 
-## Config package
+Owns Better Auth schema and helper wiring.
 
-### `@pkstack/config`
+Examples:
 
-Shared tsconfig, ESLint, Tailwind, and the `require-variants` lint rule.
+- `authSchema`
+- `createAuth`
+- `getSession`
+- route-handler helpers
+
+This package owns the auth contract, but apps still pass in their db instance.
+
+## `@pkstack/ai`
+
+Owns thin AI SDK helpers and reusable utilities.
+
+Examples:
+
+- `streamText`
+- `useChat`
+- `createAI`
+- message trimming helpers
+
+This package does not own persistence or provider-specific app logic.
+
+## `@pkstack/api`
+
+Owns plain shared contracts.
+
+Examples:
+
+- zod schemas
+- input/output types
+- router contract types
+
+This package must stay framework-agnostic.
+
+## `@pkstack/config`
+
+Owns shared repo and scaffold tooling defaults.
+
+Examples:
+
+- strict tsconfig presets
+- shared ESLint config
+- Tailwind preset
+- `require-variants` lint rule
+
+## Ownership rule
+
+If a concern is reused across scaffolded apps, it probably belongs in a package.
+
+If a concern is specific to one scaffolded app’s feature logic, it belongs in the template or generated app instead.

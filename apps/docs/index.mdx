@@ -1,30 +1,33 @@
 ---
 title: pkstack
-description: Human + AI agent starter kit for TypeScript apps.
+description: Published starter infrastructure for human + AI agent co-development.
 ---
 
 # pkstack
 
-`pkstack` is a TypeScript starter kit built for human + AI agent co-development from the start.
+pkstack is a published starter kit built around one idea:
 
-## What ships in Stage 2
+your app code, your shared runtime, and your AI agent workflow should all agree on ownership from day one.
 
-- Installable `@pkstack/*` runtime workspace packages for UI, auth, db, API contracts, and AI helpers
-- `templates/web` updated to consume those packages instead of carrying inline runtime code
-- `templates/mobile` plus a reference Expo app
-- Mintlify docs that describe the repo as it exists today
+## What pkstack includes
 
-## Release state
+- `create-pkstack` for web scaffolding
+- `create-pkstack --mobile` for Expo scaffolding
+- published shared packages under `@pkstack/*`
+- strict shared config under `@pkstack/config`
+- source-of-truth web and mobile templates inside the monorepo
+- generated `AGENTS.md` and `CLAUDE.md` in scaffolded apps
 
-- `v0.2.0` is implemented in the repo and verified locally.
-- npm publishing for the Stage 2 packages is still pending.
-- The docs hostname is not final yet. A temporary subdomain such as `pkstack.preetham.org` is acceptable.
+## Current product state
 
-## Quickstart
+- packages are published
+- templates and CLI are on `v0.2.1`
+- the next launch step is a public Mintlify-hosted docs deployment at `pkstack.preetham.org`
 
-```bash
-npm create pkstack my-app
-npm create pkstack my-mobile-app --mobile
-```
+## Read next
 
-The scaffolded apps ship with `AGENTS.md`, `CLAUDE.md`, and the gstack workflow pre-wired.
+- [Getting Started](./getting-started)
+- [Architecture](./architecture)
+- [Scaffold Flow](./scaffold-flow)
+- [Packages](./packages)
+- [Deployment](./deployment)

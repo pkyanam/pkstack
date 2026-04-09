@@ -2,23 +2,25 @@
 
 ## Purpose
 
-Shared React UI primitives for pkstack apps, with agent-legible typed `*Variants` exports alongside each component.
+`@pkstack/ui` owns shared React presentation primitives for the web stack.
+
+It exists so scaffolded web apps can reuse UI building blocks without copying them into every app.
 
 ## Public API
 
-- **`@pkstack/ui`** — root export for shared UI components and helpers
-- **`Button`** — base button primitive with typed `variant` and `size` props
-- **`buttonVariants`** — typed variant contract agents can enumerate without reading implementation details
-- **`cn(...)`** — Tailwind/classname merge helper
+- **`@pkstack/ui`** — root package export
+- **`Button`** — shared button primitive
+- **`buttonVariants`** — typed variants contract
+- **`cn(...)`** — shared class merge helper
 
 ## Do Not Modify
 
-- `buttonVariants` must remain a plain typed const export. Agents and lint rules rely on it being easy to inspect.
-- `cn(...)` must stay framework-agnostic. Do not add DOM or browser-only behavior.
-- This package owns components, not business logic. Do not add data fetching or app-specific state here.
+- Shared components here must export a typed `*Variants` contract alongside the component.
+- This package owns UI primitives only, not app business logic.
+- Keep imports portable and package-safe.
 
 ## Common Agent Mistakes
 
-1. **Exporting only the component and not the variants contract** — every shared component here must export a typed `*Variants` const.
-2. **Moving app logic into a component package** — auth state, database reads, and feature logic belong in apps or other packages.
-3. **Using path aliases inside the package** — published packages should use relative imports so the built output is portable.
+1. **Adding feature logic to UI components** — auth, billing, app data, and business state do not belong here.
+2. **Exporting only the component and hiding the variants contract** — the typed variants are part of pkstack’s agent-readable design.
+3. **Using this package from Expo/mobile code** — `@pkstack/ui` is for the web stack.

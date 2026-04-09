@@ -1,39 +1,51 @@
 # pkstack
 
-**T3 Stack was 2022 thinking. pkstack is the 2026 stack.**
+**TypeScript starter infrastructure for human + AI agent co-development.**
 
-The first TypeScript starter kit designed from first principles for **human + AI agent co-development**. Not "AI features in your app" — AI agents *working on* your app, from day one.
+pkstack is a published starter kit and monorepo that gives you:
+
+- `npm create pkstack` for a web app scaffold
+- `npm create pkstack --mobile` for an Expo scaffold
+- published `@pkstack/*` runtime packages shared across templates
+- `@pkstack/config` for strict TypeScript, ESLint, and Tailwind defaults
+- gstack-oriented `AGENTS.md` and `CLAUDE.md` conventions from day one
 
 ```bash
 npm create pkstack my-app
 npm create pkstack my-mobile-app --mobile
 ```
 
----
+## Current state
 
-## What you get
+pkstack is at `v0.2.1`.
 
-Every scaffolded project ships with:
+- `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages are now published.
+- The web template, mobile template, CLI, reference apps, and package extraction work are done.
+- The next step is publishing the docs site through Mintlify at `pkstack.preetham.org`.
 
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 15 (App Router, RSC) |
-| Language | TypeScript 5 strict + `noUncheckedIndexedAccess` |
-| Styling | Tailwind v4 + shadcn/ui |
-| ORM | Drizzle (typesafe, SQL-native) |
-| Database | Docker Compose (Postgres) → Neon in prod |
-| Auth | Better Auth (self-hosted) |
-| API | tRPC v11 (App Router pattern) |
-| AI | Vercel AI SDK (provider-agnostic) |
-| Payments | Stripe webhook starter (optional) |
-| Email | Resend helper (optional) |
-| Mobile | Expo template via `--mobile` |
-| Agent Workflow | **gstack pre-wired (12+ AI skills)** |
+## What pkstack gives you
 
-The generated app uses a curated, exact dependency set. pkstack does not chase
-"latest everything" blindly; it pins versions that are verified together.
+### Web scaffold
 
-Stage 2 also extracts the shared runtime into installable packages:
+- Next.js 15 App Router
+- TypeScript 5 strict mode with `noUncheckedIndexedAccess`
+- Tailwind v4
+- Drizzle ORM
+- Better Auth
+- tRPC v11
+- Vercel AI SDK helpers
+- optional Stripe and Resend scaffold outputs
+- generated `.env.example` and `.env.local`
+- `AGENTS.md` and `CLAUDE.md` already present
+
+### Mobile scaffold
+
+- Expo
+- TypeScript strict mode
+- shared `@pkstack/api` contracts
+- shared `@pkstack/ai` helpers
+
+### Shared packages
 
 - `@pkstack/ui`
 - `@pkstack/db`
@@ -42,81 +54,147 @@ Stage 2 also extracts the shared runtime into installable packages:
 - `@pkstack/api`
 - `@pkstack/config`
 
-## Status
+## How pkstack works end to end
 
-The repo is at **v0.2.0** at the codebase level.
+There are four layers:
 
-- Stage 2 package extraction, mobile template, docs app, and E2E coverage are implemented and verified in-repo.
-- The Stage 2 runtime packages are not published to npm yet.
-- The docs site is not deployed yet, and the production hostname is still open. `pkstack.preetham.org` is a reasonable temporary option.
-- See [CHANGELOG.md](./CHANGELOG.md) and [prompts/stage-2-handoff.md](./prompts/stage-2-handoff.md) for the current handoff state.
+1. **Published packages**
+   `packages/ui`, `db`, `auth`, `ai`, `api`, and `config` hold reusable runtime and tooling code.
+2. **Source-of-truth templates**
+   `templates/web` and `templates/mobile` are the canonical scaffold outputs.
+3. **CLI**
+   `packages/cli` copies a template, applies conditional choices, writes env files, and installs gstack.
+4. **Generated app**
+   The user gets a new app that consumes published `@pkstack/*` packages instead of copying core runtime code inline.
 
-## Why it's different
+That means:
 
+- package-owned code lives in `packages/*`
+- app-owned wiring lives in the templates
+- scaffold-time branching lives in `packages/cli/src/scaffold.ts`
+- reference examples live in `apps/*`
+
+## Repo layout
+
+```text
+pkstack/
+├── packages/
+│   ├── cli/          # create-pkstack binary
+│   ├── config/       # shared tsconfig/eslint/tailwind + lint rules
+│   ├── ui/           # shared React UI primitives
+│   ├── db/           # Drizzle and Postgres helpers
+│   ├── auth/         # Better Auth schema + helper wiring
+│   ├── ai/           # AI SDK wrappers and helper utilities
+│   └── api/          # plain TS/zod shared contracts
+├── templates/
+│   ├── web/          # source-of-truth Next.js scaffold
+│   └── mobile/       # source-of-truth Expo scaffold
+├── apps/
+│   ├── mobile/       # in-repo Expo reference app
+│   └── docs/         # Mintlify content for the docs site
+└── .github/workflows/ # CI + npm publish flow
 ```
-Every other starter kit:    pkstack:
-─────────────────────────   ──────────────────────────────
-Human-first codebase        Human+agent co-designed
-AGENTS.md as afterthought   AGENTS.md as required schema
-No workflow toolchain       gstack pre-wired (12+ skills)
-Agent drifts on changes     Agent reads AGENTS.md, stays on track
-You configure AI tools      AI tools already configured
-```
 
-## Quickstart
+## For users of pkstack
+
+### Create a web app
 
 ```bash
 npm create pkstack my-app
-npm create pkstack my-mobile-app --mobile
-
 cd my-app
-# .env.local is generated by the CLI
-$EDITOR .env.local
-docker compose up -d          # start local Postgres
 npm install
+docker compose up -d
+$EDITOR .env.local
+npm run db:migrate
 npm run dev
 ```
 
-## AI agent workflow
+### Create a mobile app
 
-Once scaffolded, Claude Code has 12+ skills available:
-
-```
-/review    — review a PR before merging
-/ship      — cut a release
-/qa        — QA test the running app
-/browse    — headless browser for dogfooding
-/investigate — debug an error
-/office-hours — YC-style founder session
+```bash
+npm create pkstack my-mobile-app --mobile
+cd my-mobile-app
+npm install
+npm run start
 ```
 
-## Project structure
+### What the generated web app looks like
 
-```
+```text
 my-app/
 ├── src/
-│   ├── app/              # Next.js App Router
-│   ├── db/
-│   │   ├── schema.ts     # your app tables
-│   │   └── auth-schema.ts  # local re-export of the @pkstack/auth schema contract
-│   ├── server/api/       # app-owned tRPC implementation
-│   └── lib/              # app-owned auth/AI wiring
-├── scripts/check-env.ts  # pre-dev env validation
-├── docker-compose.yml    # local Postgres
-├── AGENTS.md             # agent contract (required)
-└── CLAUDE.md             # Claude Code config
+│   ├── app/                # Next.js routes
+│   ├── db/                 # app schema + auth schema re-export + db wiring
+│   ├── lib/                # auth/ai/email wiring
+│   └── server/api/         # app-owned tRPC implementation
+├── scripts/check-env.ts    # required env validation
+├── docker-compose.yml
+├── AGENTS.md
+└── CLAUDE.md
 ```
 
-Optional when selected during scaffold:
-- `src/app/api/webhooks/stripe/route.ts`
-- `src/lib/email.ts`
+The generated app is not a monorepo. It is a single app that depends on published pkstack packages.
 
-Shared runtime code comes from `@pkstack/*` packages instead of being copied inline into the app.
+## For contributors to pkstack
 
-## Contributing
+### Install and validate the repo
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+```bash
+npm install
+npm run build
+npm run lint
+npm run typecheck
+npm test
+```
 
----
+### Work on the CLI locally
 
-*Built with Claude Code, reviewed with gstack.*
+```bash
+npm run build -w packages/cli
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-mobile --mobile
+```
+
+`PKSTACK_LOCAL_WORKSPACE=1` is important when testing unpublished local package changes. It rewrites `@pkstack/*` dependencies in the generated app to local `file:` paths.
+
+### Change scaffold output correctly
+
+- edit `templates/web` or `templates/mobile` if the generated files should change
+- edit `packages/cli/src/scaffold.ts` if behavior is conditional
+- edit `packages/*` if shared runtime ownership changes
+- rebuild the CLI
+- scaffold a fresh app and verify it there
+
+Do not treat `packages/cli/templates/*` as source of truth. Those are bundled copies produced by the CLI build.
+
+## Agent workflow
+
+pkstack is designed so AI coding tools can work with the project instead of fighting it.
+
+- every package, template, and app has an `AGENTS.md`
+- generated apps ship with `AGENTS.md` and `CLAUDE.md`
+- shared UI components export typed `*Variants` contracts
+- the repo keeps ownership boundaries explicit so agents know where code belongs
+
+## Docs deployment plan
+
+The docs content lives in [`apps/docs`](/Users/preetham/projects/pkstack/apps/docs).
+
+Current status:
+
+- local Mint preview works
+- package publishing is done
+- public docs deployment is the next task
+
+Target:
+
+- host the docs through Mintlify
+- use `pkstack.preetham.org` as the initial custom domain
+
+## Read next
+
+- [AGENTS.md](./AGENTS.md)
+- [CLAUDE.md](./CLAUDE.md)
+- [CONTRIBUTING.md](./CONTRIBUTING.md)
+- [CHANGELOG.md](./CHANGELOG.md)
+- [prompts/stage-2-handoff.md](./prompts/stage-2-handoff.md)

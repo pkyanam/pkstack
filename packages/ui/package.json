@@ -1,6 +1,6 @@
 {
   "name": "@pkstack/ui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared React UI primitives for pkstack apps",
   "license": "MIT",
   "type": "module",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
-    "@pkstack/config": "0.2.0",
+    "@pkstack/config": "0.2.1",
     "@types/node": "22.19.17",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

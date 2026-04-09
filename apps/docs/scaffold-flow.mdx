@@ -1,0 +1,49 @@
+---
+title: Scaffold Flow
+description: What happens when someone runs create-pkstack.
+---
+
+# Scaffold Flow
+
+When a user runs `npm create pkstack my-app`, the flow is:
+
+1. the published `create-pkstack` CLI starts
+2. the CLI prompts for project options
+3. the CLI copies the source-of-truth template into a new directory
+4. optional features are removed or kept at scaffold time
+5. env files are generated for web apps
+6. the resulting app depends on published `@pkstack/*` packages
+
+## Why this split matters
+
+It prevents three common failure modes:
+
+- copying shared runtime code into every app
+- hiding conditional scaffold logic inside templates
+- letting generated apps drift away from package ownership boundaries
+
+## Rule of thumb
+
+- if every app should get a file or pattern, change the template
+- if a scaffold choice changes output, change the CLI
+- if multiple apps should share code, change a package
+
+## Local validation loop
+
+Inside the monorepo:
+
+```bash
+npm run build
+npm run lint
+npm run typecheck
+npm test
+```
+
+Then validate a fresh scaffold:
+
+```bash
+npm run build -w packages/cli
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
+```
+
+`PKSTACK_LOCAL_WORKSPACE=1` rewrites `@pkstack/*` dependencies to local `file:` paths so unpublished local changes can be tested in a generated app.

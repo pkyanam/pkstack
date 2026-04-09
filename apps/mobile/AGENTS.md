@@ -2,23 +2,25 @@
 
 ## Purpose
 
-Reference Expo mobile app for the pkstack monorepo. It mirrors the mobile scaffold output while giving the repo a concrete workspace app to validate and evolve.
+Reference Expo app inside the pkstack monorepo.
+
+This app exists to mirror and validate the mobile scaffold while giving the repo a concrete mobile workspace app to test against.
 
 ## Public API
 
-- **`App.tsx`** — starter Expo screen showing shared contract usage
-- **`app.json`** — Expo app metadata and prebuild configuration
-- **`package.json`** — pinned mobile dependency set and Expo scripts
-- **`tsconfig.json`** — strict TypeScript configuration for the mobile app
+- **`App.tsx`** — reference mobile starter screen
+- **`app.json`** — Expo app metadata
+- **`package.json`** — mobile dependency set and scripts
+- **`tsconfig.json`** — strict TypeScript config
 
 ## Do Not Modify
 
-- Keep this app framework-focused. Web-only packages like `@pkstack/ui` do not belong here.
-- `app.json` owns the Expo app contract. Do not move those settings into ad hoc JS files without a reason.
-- The template should consume shared packages for API and AI helpers, not duplicate contract definitions locally.
+- Treat this app as a reference, not the scaffold source of truth.
+- Keep shared contracts and helpers in packages.
+- Keep web-only runtime code out of this app.
 
 ## Common Agent Mistakes
 
-1. **Importing web-only packages into Expo** — `@pkstack/ui` is DOM-oriented and should not be pulled into the mobile template.
-2. **Copying API schemas into the app** — shared contracts belong in `@pkstack/api`.
-3. **Treating this app like the source-of-truth template** — make scaffold changes in `templates/mobile`, then mirror them here if the reference app also needs them.
+1. **Changing only this app when the scaffold should change** — update `templates/mobile` first.
+2. **Pulling `@pkstack/ui` into Expo** — this is not a web app.
+3. **Duplicating contracts locally** — consume `@pkstack/api` instead.

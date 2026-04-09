@@ -2,24 +2,26 @@
 
 ## Purpose
 
-Shared Drizzle and Postgres helpers for pkstack apps. This package owns database client creation, schema merging, and migration config helpers.
+`@pkstack/db` owns shared Drizzle and Postgres helpers used by scaffolded apps.
+
+It provides the common wiring for database access while leaving app schema ownership in the app and auth schema ownership in `@pkstack/auth`.
 
 ## Public API
 
-- **`createDb(schema, connectionString?)`** — create a Drizzle client from merged app/auth schemas
-- **`createPostgresClient(connectionString?)`** — create the underlying `postgres` client with pkstack defaults
-- **`mergeSchemas(...schemas)`** — combine app-owned and package-owned schema modules into one Drizzle schema object
-- **`getDatabaseUrl(connectionString?)`** — resolve and validate the database URL
-- **`createDrizzleConfig({ schema, out? })`** — generate a Drizzle config object for app migration files
+- **`createDb(schema, connectionString?)`** — build the Drizzle instance
+- **`createPostgresClient(connectionString?)`** — create the underlying Postgres client
+- **`mergeSchemas(...schemas)`** — combine app schema and auth schema
+- **`getDatabaseUrl(connectionString?)`** — validate and resolve the database URL
+- **`createDrizzleConfig(...)`** — generate Drizzle config helpers
 
 ## Do Not Modify
 
-- This package must not define the auth schema. That contract belongs to `@pkstack/auth`.
-- Keep `prepare: false` in the Postgres client default. This is required for Neon transaction pool compatibility.
-- Migration helpers must stay plain TypeScript utilities, not app-specific wrappers.
+- Do not move the auth schema into this package.
+- Keep database helpers framework-agnostic.
+- Keep the Neon-safe Postgres defaults intact unless there is a deliberate compatibility change.
 
 ## Common Agent Mistakes
 
-1. **Moving auth table definitions into this package** — auth schema ownership stays in `@pkstack/auth`.
-2. **Hard-coding app schema paths** — apps own their schema files; this package should accept them as inputs.
-3. **Baking framework concerns into db helpers** — no Next.js, React, or Expo imports belong here.
+1. **Owning table definitions here that belong elsewhere** — app schema stays app-owned; auth schema stays in `@pkstack/auth`.
+2. **Hard-coding app paths into helpers** — accept app schema as input instead.
+3. **Adding Next.js or React concerns to db utilities** — this package must stay plain runtime infrastructure.

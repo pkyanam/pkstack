@@ -2,59 +2,77 @@
 
 ## Purpose
 
-pkstack is a TypeScript monorepo starter kit designed for human + AI agent co-development. It ships `npm create pkstack` (the CLI), `@pkstack/config` (shared toolchain presets), and a `templates/web` source-of-truth template — all pre-wired with gstack for AI agent workflows.
+pkstack is a TypeScript monorepo for a published starter kit built around human + AI agent co-development.
 
-## Repo Structure
+The repo owns four things:
 
-```
-pkstack/
-├── packages/
-│   ├── cli/          # create-pkstack binary — see packages/cli/AGENTS.md
-│   ├── config/       # @pkstack/config shared presets — see packages/config/AGENTS.md
-│   ├── ui/           # shared React UI primitives
-│   ├── db/           # Drizzle client + migration helpers
-│   ├── auth/         # Better Auth wiring + auth schema
-│   ├── ai/           # AI SDK wrappers + agent helpers
-│   └── api/          # plain TypeScript API contracts
-├── templates/
-│   ├── web/          # Next.js 15 template — see templates/web/AGENTS.md
-│   └── mobile/       # Expo template for `--mobile`
-├── apps/
-│   ├── mobile/       # reference Expo app
-│   └── docs/         # Mintlify-format docs site
-├── scripts/
-│   └── setup-gstack.sh   # contributor setup helper for installing gstack
-└── .github/
-    └── workflows/    # CI/CD pipelines
-```
+1. published runtime/tooling packages in `packages/*`
+2. source-of-truth scaffold templates in `templates/*`
+3. the `create-pkstack` CLI in `packages/cli`
+4. reference apps/docs in `apps/*`
+
+The current product state is:
+
+- packages are published to npm
+- templates and CLI are shipping `v0.2.1`
+- the next delivery step is a public Mintlify-hosted docs website at `pkstack.preetham.org`
 
 ## Public API
 
-- **`npm create pkstack`** — scaffolds a new AI-native Next.js app
-- **`npm create pkstack --mobile`** — scaffolds the Expo mobile template
-- **`npx create-pkstack setup-gstack`** — installs gstack into an existing pkstack project
-- **`@pkstack/*`** — shared runtime and contract packages consumed by templates/apps
-- **`@pkstack/config`** — shared tsconfig presets, eslint config, tailwind preset
+- **`npm create pkstack [project-name]`** — scaffold the web app
+- **`npm create pkstack [project-name] --mobile`** — scaffold the Expo app
+- **`npx create-pkstack setup-gstack`** — install gstack into an existing project
+- **`@pkstack/ui`** — shared React UI primitives
+- **`@pkstack/db`** — shared Drizzle and Postgres helpers
+- **`@pkstack/auth`** — shared Better Auth schema and helper wiring
+- **`@pkstack/ai`** — shared AI SDK wrappers and helper utilities
+- **`@pkstack/api`** — shared plain TypeScript/zod contracts
+- **`@pkstack/config`** — shared tsconfig, ESLint, Tailwind, and lint rules
 
 ## Do Not Modify
 
-- `templates/web/` and `templates/mobile/` are the source of truth for scaffold output. Template changes must be validated against real generated apps before merging.
-- `packages/cli/src/constants.ts` — `GSTACK_VERSION` pin requires a dedicated PR with release notes.
-- The AGENTS.md H2 headings (`## Purpose`, `## Public API`, `## Do Not Modify`, `## Common Agent Mistakes`) are a required schema across all packages. Do not remove or rename them.
+- `templates/web/` and `templates/mobile/` are the source of truth for scaffold output.
+- `packages/cli/templates/*` are bundled copies, not authoring sources.
+- `packages/cli/src/constants.ts` `GSTACK_VERSION` pin should only change in a dedicated PR.
+- The AGENTS.md H2 headings `## Purpose`, `## Public API`, `## Do Not Modify`, and `## Common Agent Mistakes` are required across the repo.
 
 ## Common Agent Mistakes
 
-1. **Editing `templates/web` directly instead of updating the CLI template logic** — the CLI in `packages/cli/src/scaffold.ts` copies and transforms `templates/web`. If a template feature is conditional (e.g., Stripe), it must be handled in scaffold.ts, not baked into the template.
-2. **Installing packages in the root workspace instead of the correct package** — each package manages its own `package.json`. Run `npm install <pkg> -w packages/cli` (not root) to add dependencies to the CLI.
-3. **Forgetting to update `.env.example` when adding a new env var** — the CLI generates `.env.example` from `packages/cli/src/env.ts`. Update that file, not the template's `.env.example` directly (which is the generated output reference).
+1. **Changing the bundled CLI templates instead of the source templates** — edit `templates/*`, then rebuild the CLI so `packages/cli/templates/*` updates.
+2. **Putting conditional scaffold logic into the templates** — optional features belong in `packages/cli/src/scaffold.ts`, not as dead branches in scaffold output.
+3. **Moving app-owned code into shared packages** — package boundaries are strict. UI belongs in `@pkstack/ui`, auth schema belongs in `@pkstack/auth`, db helpers belong in `@pkstack/db`, and app feature logic stays in the scaffolded app.
+4. **Validating only inside the monorepo** — the real check is a fresh generated app created from the built CLI.
 
-## Skill Routing (gstack)
+## Repo Structure
 
-| Task | Skill |
-|------|-------|
-| Review a PR before merging | `/review` |
-| Ship a release | `/ship` |
-| Investigate a bug | `/investigate` |
-| QA the scaffold output | `/qa` |
-| Design system decisions | `/design-consultation` |
-| Architecture changes | `/plan-eng-review` |
+```text
+pkstack/
+├── packages/
+│   ├── cli/              # create-pkstack binary
+│   ├── config/           # shared config and lint rules
+│   ├── ui/               # shared UI primitives
+│   ├── db/               # shared Drizzle helpers
+│   ├── auth/             # shared Better Auth contract/helpers
+│   ├── ai/               # shared AI helpers
+│   └── api/              # shared contracts
+├── templates/
+│   ├── web/              # source-of-truth web scaffold
+│   └── mobile/           # source-of-truth mobile scaffold
+├── apps/
+│   ├── mobile/           # reference Expo app
+│   └── docs/             # Mintlify docs content
+└── .github/workflows/    # CI, verification, and npm publish
+```
+
+## Working Model
+
+When a user runs `npm create pkstack my-app`, the flow is:
+
+1. `create-pkstack` selects a template
+2. the CLI copies template files into a new directory
+3. scaffold choices remove or keep optional files
+4. web scaffolds get generated env files
+5. the generated app depends on published `@pkstack/*` packages
+6. the generated app starts with agent-facing docs already present
+
+Use this model when deciding where changes belong.

@@ -2,69 +2,91 @@
 
 ## Project
 
-pkstack monorepo. See `AGENTS.md` for structure and conventions.
+pkstack is a published starter-kit monorepo.
 
-Current release target: `v0.2.0`.
-Code is implemented and verified in-repo; package publishing and docs deployment are still pending.
+The repo has one job: produce and maintain a coherent scaffold pipeline from shared packages to templates to the `create-pkstack` CLI to generated apps.
+
+Current state:
+
+- `v0.2.1` packages and CLI are published
+- the next product step is deploying the docs site through Mintlify at `pkstack.preetham.org`
+
+Read `AGENTS.md` first for ownership and repo shape.
+
+## Mental Model
+
+Work from these boundaries:
+
+- `packages/*` own reusable runtime and config code
+- `templates/*` own the generated app file structure
+- `packages/cli` owns scaffold-time transformations
+- `apps/*` are reference apps and docs, not scaffold sources
+
+If you change one layer, validate the layer above it:
+
+- package change -> validate template/app consumers
+- template change -> scaffold a fresh app
+- CLI change -> rebuild CLI, scaffold fresh app, verify generated output
 
 ## gstack Skills
 
-This project uses gstack. Skills are in `.claude/skills/gstack/` (gitignored — run `./scripts/setup-gstack.sh` after cloning).
+This project uses gstack. Skills live in `.claude/skills/gstack/` after running `./scripts/setup-gstack.sh`.
 
-Key skills:
-- `/review` — before every merge
-- `/ship` — to cut a release
-- `/investigate` — for bugs
-- `/qa` — to test scaffold output
-- `/plan-eng-review` — for architecture decisions
+Common skills:
 
-## Conventions
+- `/review` for merge review
+- `/ship` for release work
+- `/investigate` for bugs
+- `/qa` for scaffold verification
+- `/plan-eng-review` for architecture changes
 
-- **TypeScript strict everywhere.** `noUncheckedIndexedAccess: true` in all tsconfigs.
-- **Templates are source of truth.** Never validate scaffold behavior only by reading CLI code — run the built CLI and check the generated output.
-- **Agent-legible component exports.** Every shared UI component must export a typed `*Variants` const alongside the component.
-- **AGENTS.md is required** in every package/app/template. The four H2 headings are mandatory.
-
-## Local dev
+## Working Commands
 
 ```bash
-# Install gstack after cloning (gitignored)
-./scripts/setup-gstack.sh
-
-# Install dependencies
+# install
 npm install
 
-# Build the packages
-npm run build -w packages/cli
+# full repo validation
 npm run build
+npm run lint
+npm run typecheck
+npm test
 
-# Build the web template with stub env vars
+# build the CLI
+npm run build -w packages/cli
+
+# local scaffold testing against local unpublished package changes
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-mobile --mobile
+
+# docs preview
+npm run dev -w apps/docs
+```
+
+## Web Template Validation
+
+```bash
 cd templates/web
+npx tsc --noEmit
+SKIP_ENV_VALIDATION=true \
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/testdb \
 BETTER_AUTH_SECRET=test-secret-for-ci-only-not-real \
 BETTER_AUTH_URL=http://localhost:3000 \
 npx next build
-cd ../..
+```
 
-# Validate the mobile template
+## Mobile Template Validation
+
+```bash
 cd templates/mobile
 npm run typecheck
 CI=1 npx expo prebuild --no-install
-cd ../..
-
-# Test the CLI locally against workspace packages
-PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
 ```
 
-## Testing
+## Documentation Rules
 
-```bash
-# Run all tests
-npm test
-
-# Test CLI only
-npm test -w packages/cli
-
-# Validate the template compiles
-cd templates/web && npx tsc --noEmit
-```
+- docs should explain the full scaffold pipeline, not isolated directories
+- docs must distinguish source-of-truth templates from bundled template copies
+- docs must distinguish published packages from app-owned code
+- docs must state what is shipped versus what is merely planned
+- the current planned deployment target for docs is Mintlify with the custom domain `pkstack.preetham.org`

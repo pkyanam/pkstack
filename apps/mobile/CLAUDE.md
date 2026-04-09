@@ -2,15 +2,9 @@
 
 ## What this is
 
-The in-repo Expo reference app. See `AGENTS.md` for the ownership boundaries.
+The in-repo Expo reference app for pkstack.
 
-## gstack skills
-
-| Task | Skill |
-|------|-------|
-| QA this app | `/qa` |
-| Debug a native/runtime issue | `/investigate` |
-| Review a mobile PR | `/review` |
+It is useful for validating package and template changes, but it is not the source-of-truth scaffold template.
 
 ## Common tasks
 
@@ -18,12 +12,11 @@ The in-repo Expo reference app. See `AGENTS.md` for the ownership boundaries.
 npm install
 npm run typecheck
 npm run start
-
-# Validate native project generation
-npx expo prebuild --non-interactive
+CI=1 npx expo prebuild --no-install
 ```
 
-## Conventions
+## Rules
 
-- Shared API and AI helpers should come from `@pkstack/*`.
-- Keep the Expo template thin; app feature state lives in the app, not in shared config packages.
+- change `templates/mobile` if scaffold output should change
+- keep shared contracts in packages
+- keep the mobile app separate from web-specific runtime concerns

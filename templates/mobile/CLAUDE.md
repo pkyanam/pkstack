@@ -2,15 +2,9 @@
 
 ## What this is
 
-The scaffolded Expo app output. See `AGENTS.md` for the ownership boundaries.
+The source-of-truth Expo scaffold for pkstack.
 
-## gstack skills
-
-| Task | Skill |
-|------|-------|
-| QA this app | `/qa` |
-| Debug a native/runtime issue | `/investigate` |
-| Review a mobile PR | `/review` |
+If the generated mobile app should change, start here.
 
 ## Common tasks
 
@@ -18,12 +12,12 @@ The scaffolded Expo app output. See `AGENTS.md` for the ownership boundaries.
 npm install
 npm run typecheck
 npm run start
-
-# Validate native project generation
-npx expo prebuild --non-interactive
+CI=1 npx expo prebuild --no-install
 ```
 
-## Conventions
+## Ownership rules
 
-- Shared API and AI helpers should come from `@pkstack/*`.
-- Keep the Expo template thin; app feature state lives in the app, not in shared config packages.
+- shared contracts belong in `@pkstack/api`
+- shared AI helpers belong in `@pkstack/ai`
+- mobile-specific UI and app state belong in the app
+- web-only packages do not belong here

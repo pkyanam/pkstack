@@ -1,0 +1,50 @@
+---
+title: Deployment
+description: Current deployment target and public docs plan.
+---
+
+# Deployment
+
+## Package publishing
+
+The npm publishing step is complete.
+
+The published surface is:
+
+- `create-pkstack`
+- `@pkstack/config`
+- `@pkstack/ui`
+- `@pkstack/db`
+- `@pkstack/auth`
+- `@pkstack/ai`
+- `@pkstack/api`
+
+## Docs deployment target
+
+The next public step is the docs site.
+
+Planned target:
+
+- platform: Mintlify hosting
+- hostname: `pkstack.preetham.org`
+- source content: `apps/docs`
+
+## Current docs state
+
+Today the repo has:
+
+- Mintlify docs content in `apps/docs`
+- local preview through `mint dev`
+- validation through `npm run build -w apps/docs`
+
+What is still needed:
+
+- Mintlify project/repo connection
+- DNS for `pkstack.preetham.org`
+
+## Docs contributor commands
+
+```bash
+npm run dev -w apps/docs
+npm run build -w apps/docs
+```

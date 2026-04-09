@@ -1,0 +1,63 @@
+---
+title: Getting Started
+description: How to use pkstack as an app author.
+---
+
+# Getting Started
+
+## Create a web app
+
+```bash
+npm create pkstack my-app
+cd my-app
+npm install
+docker compose up -d
+$EDITOR .env.local
+npm run db:migrate
+npm run dev
+```
+
+What you get:
+
+- Next.js 15 App Router
+- strict TypeScript
+- Tailwind v4
+- Drizzle
+- Better Auth
+- tRPC
+- Vercel AI SDK helpers
+- optional Stripe and Resend scaffold outputs
+- `AGENTS.md` and `CLAUDE.md`
+
+## Create a mobile app
+
+```bash
+npm create pkstack my-mobile-app --mobile
+cd my-mobile-app
+npm install
+npm run start
+```
+
+What you get:
+
+- Expo
+- strict TypeScript
+- shared API contracts from `@pkstack/api`
+- shared AI helpers from `@pkstack/ai`
+
+## Generated web app shape
+
+```text
+my-app/
+├── src/app/              # Next.js routes
+├── src/db/               # app schema + db wiring
+├── src/lib/              # auth/ai/email wiring
+├── src/server/api/       # app-owned tRPC implementation
+├── scripts/check-env.ts
+├── AGENTS.md
+└── CLAUDE.md
+```
+
+The generated app is a normal app repo, not a monorepo.
+
+The runtime pieces come from the published pkstack packages instead of being copied inline.

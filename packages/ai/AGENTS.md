@@ -2,24 +2,26 @@
 
 ## Purpose
 
-Shared Vercel AI SDK wrappers and agent workflow helpers for pkstack apps. This package owns model binding, chat hook exports, and context-window helpers.
+`@pkstack/ai` owns thin, reusable AI SDK helpers for pkstack apps.
+
+It is intentionally small: pkstack wants shared conventions, not a second application framework.
 
 ## Public API
 
-- **`createAI({ model, ...defaults })`** — bind a model and default options into a reusable AI client
-- **`streamText(options)`** — pkstack wrapper around Vercel AI SDK `streamText`
-- **`useChat`** — re-export of the Vercel AI SDK React chat hook
-- **`createAgentKit({ model, ...defaults })`** — helper bundle for common agent patterns
-- **`trimMessages(messages, maxMessages?)`** — keep agent context windows bounded
+- **`createAI(...)`** — reusable AI client helper
+- **`streamText(...)`** — shared wrapper around AI SDK streaming
+- **`useChat`** — shared chat-hook export
+- **`createAgentKit(...)`** — helper bundle for common agent patterns
+- **`trimMessages(...)`** — message-window helper
 
 ## Do Not Modify
 
-- This package must not add database persistence or message storage concerns.
-- Keep the package provider-agnostic. Apps choose models; this package supplies wrappers and conventions.
-- Agent helpers should stay composable utilities, not a separate framework.
+- Keep this package provider-agnostic.
+- Do not add persistence or app orchestration state here.
+- Keep helpers composable and small.
 
 ## Common Agent Mistakes
 
-1. **Hard-coding providers into the package** — keep provider selection app-owned.
-2. **Mixing persistence into stream helpers** — storage belongs in apps or other runtime packages.
-3. **Treating AgentKit as orchestration state** — it should stay a thin helper layer over the AI SDK.
+1. **Hard-coding model vendors into the package** — provider choice should stay app-owned.
+2. **Adding database persistence to chat helpers** — storage belongs in apps or another package.
+3. **Turning this package into an agent framework** — it should stay a thin helper layer.
