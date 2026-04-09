@@ -1,0 +1,22 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "pkstack",
+  "theme": "mint",
+  "colors": {
+    "primary": "#8c4b2f",
+    "light": "#d27c52",
+    "dark": "#5f2a15"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "pages": ["index", "stage-2"]
+      },
+      {
+        "group": "Reference",
+        "pages": ["packages"]
+      }
+    ]
+  }
+}

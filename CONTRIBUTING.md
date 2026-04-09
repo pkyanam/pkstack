@@ -23,14 +23,17 @@ npm install
 |------|-----------|
 | `packages/cli/` | `create-pkstack` binary. Source of CLI prompts, file generation, gstack install. |
 | `packages/config/` | `@pkstack/config` — shared tsconfig/eslint/tailwind presets. |
-| `templates/web/` | **Source of truth** for what `npm create pkstack` produces. Must always compile and build. |
-| `apps/` | Reserved for later-stage reference apps and docs. Stage 1 ships the published packages plus `templates/web/`. |
+| `packages/ui/`, `db/`, `auth/`, `ai/`, `api/` | Stage 2 runtime packages consumed by the templates/apps. |
+| `templates/web/` | **Source of truth** for the web scaffold output. Must always compile and build. |
+| `templates/mobile/` | **Source of truth** for the mobile scaffold output. |
+| `apps/mobile/` | In-repo Expo reference app. |
+| `apps/docs/` | Mintlify-format docs site. |
 
 ## Key rules
 
-### `templates/web` is the source of truth
+### Templates are the source of truth
 
-Every change to the scaffold output must be made in `templates/web/`. After editing:
+Every change to scaffold output must be made in `templates/web/` or `templates/mobile/`, then validated via the built CLI. After editing the web template:
 
 ```bash
 cd templates/web
@@ -43,6 +46,15 @@ npx next build
 
 CI will run both checks on every PR.
 
+For the mobile template:
+
+```bash
+cd templates/mobile
+npm install
+npm run typecheck
+CI=1 npx expo prebuild --no-install
+```
+
 ### Dependency policy
 
 The scaffolded app uses exact dependency versions, not caret ranges and never `"*"`.
@@ -52,7 +64,7 @@ with `npm install`, `npm run typecheck`, and `npm run build`.
 
 ### Conditional template features
 
-Features that are optional (tRPC, Stripe, Resend) are handled in `packages/cli/src/scaffold.ts` — the file generation logic strips or injects files based on user choices. Do not gate features inside `templates/web/` with env checks. Gate them in the CLI scaffold logic.
+Features that are optional (tRPC, Stripe, Resend, mobile template selection) are handled in `packages/cli/src/scaffold.ts`. Do not gate scaffold variants inside the templates with app-time checks. Gate them in the CLI scaffold logic.
 
 ### Testing the CLI locally
 
@@ -60,11 +72,9 @@ Features that are optional (tRPC, Stripe, Resend) are handled in `packages/cli/s
 # Build the CLI
 npm run build -w packages/cli
 
-# Link it globally
-cd packages/cli && npm link
-
-# Run it
-npm create pkstack test-app
+# For unpublished Stage 2 packages, rewrite @pkstack/* deps to local file: paths
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-mobile --mobile
 ```
 
 ### GSTACK_VERSION
@@ -106,4 +116,10 @@ git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-The `publish` CI job publishes `create-pkstack` and `@pkstack/config` to npm automatically.
+The publish flow now needs to cover `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages.
+
+Current release-prep target:
+
+- Codebase version: `0.2.0`
+- Git tag to push: `v0.2.0`
+- Remaining release blockers: npm publish for Stage 2 packages and docs deployment/domain choice

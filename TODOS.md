@@ -1,22 +1,25 @@
 # TODOS
 
-## v0.1
+## v0.2.0 shipped in-repo
 
-- [x] **GitHub repo is live** at `pkyanam/pkstack`.
-- [x] **Published packages verified** on npm.
-- [x] **Template verification**: `templates/web` passes `tsc --noEmit` and `next build` with stub env vars.
-- [x] **shadcn/ui baseline exists** in `templates/web/src/components/ui/`.
-- [x] **gstack tar extraction works on Node 18/20/22** via the `tar` package in `packages/cli`.
-- [x] **Env validation + generated env files**: the CLI generates `.env.example` and `.env.local`, and `scripts/check-env.ts` points users at `.env.local`.
-- [x] **Unsupported Turso path removed**: Stage 1 now only advertises the working Postgres/Neon flow.
-- [x] **Curated exact dependency set**: scaffolded apps use pinned package versions, and a fresh generated app now passes `npm install`, `npm run typecheck`, and `npm run build`.
-- [ ] **Confirm `NPM_TOKEN` remains configured** in GitHub Actions for future releases.
+- [x] Extract `@pkstack/ui`, `@pkstack/db`, `@pkstack/auth`, `@pkstack/ai`, and `@pkstack/api`
+- [x] Rewire `templates/web` to consume the extracted packages
+- [x] Add `templates/mobile/` and CLI `--mobile` support
+- [x] Add `apps/mobile/` reference Expo app
+- [x] Add `apps/docs/` Mintlify content site
+- [x] Move the ESLint `require-variants` rule into `@pkstack/config`
+- [x] Add Playwright scaffold E2E coverage
+- [x] Verify repo build/lint/typecheck/test plus fresh web/mobile scaffolds
 
-## v0.2
+## Still open before a public v0.2 release
 
-- [ ] Extract `@pkstack/ui`, `@pkstack/db`, `@pkstack/auth`, `@pkstack/ai`, `@pkstack/api` from template code as published packages
-- [ ] `apps/mobile/` Expo reference app
-- [ ] `apps/docs/` Mintlify docs site at pkstack.dev
-- [ ] `templates/mobile/` with `--mobile` CLI flag
-- [ ] Migrate ESLint variants rule from template eslint config → `@pkstack/config`
-- [ ] E2E tests with Playwright
+- [ ] Publish `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages to npm
+- [ ] Decide the docs hostname and deploy `apps/docs`
+- [ ] Confirm `NPM_TOKEN` and any docs-hosting secrets are configured in GitHub Actions
+- [ ] Smoke-test install from the published packages instead of local workspace overrides
+
+## Next-agent cleanup
+
+- [ ] Remove the Mint React dedupe workaround if a Mint release makes it unnecessary
+- [ ] Review whether the root `overrides` block is still needed after the next Mint upgrade
+- [ ] Triage remaining non-blocking Expo warnings from `expo prebuild`

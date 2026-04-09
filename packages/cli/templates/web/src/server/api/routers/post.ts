@@ -1,7 +1,7 @@
-import { z } from 'zod'
+import { createPostInputSchema, deletePostInputSchema, getPostByIdInputSchema } from '@pkstack/api'
+import { eq } from 'drizzle-orm'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { posts } from '@/db/schema'
-import { eq } from 'drizzle-orm'
 
 export const postRouter = createTRPCRouter({
   list: publicProcedure.query(async ({ ctx }) => {
@@ -9,14 +9,14 @@ export const postRouter = createTRPCRouter({
   }),
 
   byId: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(getPostByIdInputSchema)
     .query(async ({ ctx, input }) => {
       const result = await ctx.db.select().from(posts).where(eq(posts.id, input.id)).limit(1)
       return result[0] ?? null
     }),
 
   create: protectedProcedure
-    .input(z.object({ title: z.string().min(1).max(255), content: z.string().optional() }))
+    .input(createPostInputSchema)
     .mutation(async ({ ctx, input }) => {
       const [post] = await ctx.db
         .insert(posts)
@@ -30,7 +30,7 @@ export const postRouter = createTRPCRouter({
     }),
 
   delete: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(deletePostInputSchema)
     .mutation(async ({ ctx, input }) => {
       await ctx.db.delete(posts).where(eq(posts.id, input.id))
     }),

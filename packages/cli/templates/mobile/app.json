@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "pkstack mobile",
+    "slug": "pkstack-mobile",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {},
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

@@ -31,11 +31,6 @@ npm run dev
 # Add a new tRPC router
 # 1. Create src/server/api/routers/your-router.ts
 # 2. Add to src/server/api/root.ts
-
-# Regenerate auth schema (after upgrading better-auth)
-# npx auth@latest generate
-# npm run db:generate
-# npm run db:migrate
 ```
 
 Optional scaffold outputs:
@@ -44,11 +39,11 @@ Optional scaffold outputs:
 
 ## AI integration
 
-`ai` (Vercel AI SDK) is pre-installed. To add a streaming chat endpoint:
+`@pkstack/ai` is pre-installed. To add a streaming chat endpoint:
 
 ```typescript
 // src/app/api/chat/route.ts
-import { streamText } from 'ai'
+import { streamText } from '@/lib/ai'
 import { anthropic } from '@ai-sdk/anthropic'
 
 export async function POST(req: Request) {

@@ -1,0 +1,30 @@
+---
+title: Stage 2
+description: Package extraction and the v0.2 delivery scope.
+---
+
+# Stage 2
+
+Stage 2 turns the starter conventions into reusable packages instead of leaving them trapped inside the web template.
+
+## Package boundaries
+
+- `@pkstack/ui` owns shared React components and typed `*Variants` exports.
+- `@pkstack/db` owns Drizzle client creation, schema merging, and migration config helpers.
+- `@pkstack/auth` owns Better Auth wiring plus the auth schema contract.
+- `@pkstack/ai` owns AI SDK wrappers and AgentKit helpers.
+- `@pkstack/api` owns plain TypeScript and zod API contracts.
+
+## Deliverables
+
+- Web template rewired to import the extracted packages
+- Expo mobile template and in-repo reference app
+- Mintlify docs site content
+- Playwright E2E coverage for a generated web app
+
+## Current gap to a public release
+
+The code deliverables are complete for `v0.2.0`, but the public release is not fully closed out yet:
+
+- the Stage 2 packages still need to be published to npm
+- the docs app still needs a deployed hostname

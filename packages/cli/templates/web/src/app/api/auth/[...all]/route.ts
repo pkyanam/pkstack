@@ -1,4 +1,4 @@
 import { auth } from '@/lib/auth'
-import { toNextJsHandler } from 'better-auth/next-js'
+import { createAuthRouteHandlers } from '@pkstack/auth'
 
-export const { POST, GET } = toNextJsHandler(auth)
+export const { POST, GET } = createAuthRouteHandlers(auth)

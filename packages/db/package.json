@@ -1,0 +1,52 @@
+{
+  "name": "@pkstack/db",
+  "version": "0.2.0",
+  "description": "Shared Drizzle database helpers for pkstack apps",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./drizzle": {
+      "types": "./src/drizzle.ts",
+      "default": "./dist/drizzle.js"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src/",
+    "test": "echo 'no tests for @pkstack/db'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.41.0",
+    "postgres": "3.4.9"
+  },
+  "peerDependencies": {
+    "drizzle-kit": "0.31.10"
+  },
+  "peerDependenciesMeta": {
+    "drizzle-kit": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@pkstack/config": "0.2.0",
+    "@types/node": "22.19.17",
+    "drizzle-kit": "0.31.10",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.58.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

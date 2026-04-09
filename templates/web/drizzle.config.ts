@@ -1,10 +1,5 @@
-import { defineConfig } from 'drizzle-kit'
+import { createDrizzleConfig } from '@pkstack/db/drizzle'
 
-export default defineConfig({
+export default createDrizzleConfig({
   schema: ['./src/db/schema.ts', './src/db/auth-schema.ts'],
-  out: './drizzle',
-  dialect: 'postgresql',
-  dbCredentials: {
-    url: process.env['DATABASE_URL']!,
-  },
 })

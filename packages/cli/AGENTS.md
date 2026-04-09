@@ -2,11 +2,12 @@
 
 ## Purpose
 
-The `create-pkstack` npm binary. Prompts for project configuration, copies `templates/web` with user choices applied, generates env files, and installs gstack.
+The `create-pkstack` npm binary. Prompts for project configuration, copies the selected template with user choices applied, generates env files for web scaffolds, and installs gstack.
 
 ## Public API
 
 - **`npm create pkstack [project-name]`** — interactive scaffold flow
+- **`npm create pkstack [project-name] --mobile`** — scaffold the Expo mobile template
 - **`npx create-pkstack setup-gstack`** — install gstack into the current directory
 - **`scaffold(opts)`** — (internal) copies template files with filters applied
 - **`installGstack(projectDir)`** — (internal) downloads or symlinks gstack

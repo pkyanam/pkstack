@@ -1,0 +1,29 @@
+{
+  "name": "mobile",
+  "version": "0.2.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build": "npm run typecheck",
+    "lint": "echo 'no lint step for mobile template'",
+    "test": "echo 'no tests for mobile template'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pkstack/ai": "0.2.0",
+    "@pkstack/api": "0.2.0",
+    "expo": "55.0.12",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "react-native": "0.83.4",
+    "react-native-web": "0.21.2"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "typescript": "5.9.3"
+  }
+}

@@ -10,11 +10,18 @@ pkstack is a TypeScript monorepo starter kit designed for human + AI agent co-de
 pkstack/
 ├── packages/
 │   ├── cli/          # create-pkstack binary — see packages/cli/AGENTS.md
-│   └── config/       # @pkstack/config shared presets — see packages/config/AGENTS.md
+│   ├── config/       # @pkstack/config shared presets — see packages/config/AGENTS.md
+│   ├── ui/           # shared React UI primitives
+│   ├── db/           # Drizzle client + migration helpers
+│   ├── auth/         # Better Auth wiring + auth schema
+│   ├── ai/           # AI SDK wrappers + agent helpers
+│   └── api/          # plain TypeScript API contracts
 ├── templates/
-│   └── web/          # Next.js 15 template — see templates/web/AGENTS.md
+│   ├── web/          # Next.js 15 template — see templates/web/AGENTS.md
+│   └── mobile/       # Expo template for `--mobile`
 ├── apps/
-│   └── ...           # reserved for later-stage reference apps and docs
+│   ├── mobile/       # reference Expo app
+│   └── docs/         # Mintlify-format docs site
 ├── scripts/
 │   └── setup-gstack.sh   # contributor setup helper for installing gstack
 └── .github/
@@ -24,12 +31,14 @@ pkstack/
 ## Public API
 
 - **`npm create pkstack`** — scaffolds a new AI-native Next.js app
+- **`npm create pkstack --mobile`** — scaffolds the Expo mobile template
 - **`npx create-pkstack setup-gstack`** — installs gstack into an existing pkstack project
+- **`@pkstack/*`** — shared runtime and contract packages consumed by templates/apps
 - **`@pkstack/config`** — shared tsconfig presets, eslint config, tailwind preset
 
 ## Do Not Modify
 
-- `templates/web/` is the source of truth for scaffold output. All template changes must be validated with `tsc --noEmit` and `next build` before merging.
+- `templates/web/` and `templates/mobile/` are the source of truth for scaffold output. Template changes must be validated against real generated apps before merging.
 - `packages/cli/src/constants.ts` — `GSTACK_VERSION` pin requires a dedicated PR with release notes.
 - The AGENTS.md H2 headings (`## Purpose`, `## Public API`, `## Do Not Modify`, `## Common Agent Mistakes`) are a required schema across all packages. Do not remove or rename them.
 

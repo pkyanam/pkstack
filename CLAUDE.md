@@ -4,6 +4,9 @@
 
 pkstack monorepo. See `AGENTS.md` for structure and conventions.
 
+Current release target: `v0.2.0`.
+Code is implemented and verified in-repo; package publishing and docs deployment are still pending.
+
 ## gstack Skills
 
 This project uses gstack. Skills are in `.claude/skills/gstack/` (gitignored — run `./scripts/setup-gstack.sh` after cloning).
@@ -18,8 +21,8 @@ Key skills:
 ## Conventions
 
 - **TypeScript strict everywhere.** `noUncheckedIndexedAccess: true` in all tsconfigs.
-- **Template is source of truth.** Never validate template behavior by reading CLI code — run the scaffold and check the output.
-- **Agent-legible component exports.** Every UI component in `templates/web/src/components/` must export a typed `variants` const alongside the component.
+- **Templates are source of truth.** Never validate scaffold behavior only by reading CLI code — run the built CLI and check the generated output.
+- **Agent-legible component exports.** Every shared UI component must export a typed `*Variants` const alongside the component.
 - **AGENTS.md is required** in every package/app/template. The four H2 headings are mandatory.
 
 ## Local dev
@@ -31,18 +34,26 @@ Key skills:
 # Install dependencies
 npm install
 
-# Build the published packages
+# Build the packages
 npm run build -w packages/cli
+npm run build
 
-# Build the template with stub env vars
+# Build the web template with stub env vars
 cd templates/web
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/testdb \
 BETTER_AUTH_SECRET=test-secret-for-ci-only-not-real \
 BETTER_AUTH_URL=http://localhost:3000 \
 npx next build
 cd ../..
-# Test the CLI locally
-node packages/cli/dist/index.js
+
+# Validate the mobile template
+cd templates/mobile
+npm run typecheck
+CI=1 npx expo prebuild --no-install
+cd ../..
+
+# Test the CLI locally against workspace packages
+PKSTACK_LOCAL_WORKSPACE=1 node packages/cli/dist/index.js test-app
 ```
 
 ## Testing

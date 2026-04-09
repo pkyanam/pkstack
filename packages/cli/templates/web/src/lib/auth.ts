@@ -1,23 +1,8 @@
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '../db'
-import * as authSchema from '../db/auth-schema'
+import { createAuth } from '@pkstack/auth'
 
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: 'pg',
-    schema: authSchema,
-  }),
-  emailAndPassword: {
-    enabled: true,
-  },
-  // Add social providers by setting env vars and uncommenting:
-  // socialProviders: {
-  //   github: {
-  //     clientId: process.env.GITHUB_CLIENT_ID!,
-  //     clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-  //   },
-  // },
+export const auth = createAuth({
+  db,
 })
 
 export type Session = typeof auth.$Infer.Session

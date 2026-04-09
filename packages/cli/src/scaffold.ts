@@ -8,10 +8,13 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs'
-import { join, relative } from 'node:path'
+import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+export type TemplateKind = 'web' | 'mobile'
+
 export interface ScaffoldOptions {
+  template: TemplateKind
   projectName: string
   projectDir: string
   includeTrpc: boolean
@@ -19,7 +22,10 @@ export interface ScaffoldOptions {
   includeResend: boolean
 }
 
-const TEMPLATE_DIR = join(fileURLToPath(import.meta.url), '..', '..', 'templates', 'web')
+const CLI_DIR = dirname(fileURLToPath(import.meta.url))
+const CLI_PACKAGE_ROOT = join(CLI_DIR, '..')
+const TEMPLATES_DIR = join(CLI_PACKAGE_ROOT, 'templates')
+const WORKSPACE_ROOT = join(CLI_PACKAGE_ROOT, '..', '..')
 
 const EXCLUDED_TEMPLATE_SEGMENTS = [
   `${join('', '.git')}`,
@@ -45,15 +51,16 @@ const RESEND_PATHS = [
 ]
 
 export function scaffold(opts: ScaffoldOptions): void {
-  const { projectName, projectDir, includeTrpc, includeStripe, includeResend } = opts
+  const { template, projectName, projectDir, includeTrpc, includeStripe, includeResend } = opts
+  const templateDir = join(TEMPLATES_DIR, template)
 
   if (existsSync(projectDir)) {
     throw new Error(`Directory "${projectDir}" already exists. Choose a different project name.`)
   }
 
   try {
-    copyDirRecursive(TEMPLATE_DIR, projectDir, (srcPath) => {
-      const rel = relative(TEMPLATE_DIR, srcPath)
+    copyDirRecursive(templateDir, projectDir, (srcPath) => {
+      const rel = relative(templateDir, srcPath)
 
       if (EXCLUDED_TEMPLATE_SEGMENTS.some((segment) => rel === segment || rel.startsWith(`${segment}/`))) {
         return false
@@ -61,28 +68,30 @@ export function scaffold(opts: ScaffoldOptions): void {
 
       if (rel === '.env.local') return false
 
-      // Strip tRPC files if not selected
-      if (!includeTrpc && TRPC_PATHS.some((p) => rel.startsWith(p))) return false
+      if (template === 'web') {
+        // Strip tRPC files if not selected
+        if (!includeTrpc && TRPC_PATHS.some((p) => rel.startsWith(p))) return false
 
-      // Strip Stripe files if not selected
-      if (!includeStripe && STRIPE_PATHS.some((p) => rel.startsWith(p))) return false
+        // Strip Stripe files if not selected
+        if (!includeStripe && STRIPE_PATHS.some((p) => rel.startsWith(p))) return false
 
-      // Strip Resend files if not selected
-      if (!includeResend && RESEND_PATHS.some((p) => rel.startsWith(p))) return false
+        // Strip Resend files if not selected
+        if (!includeResend && RESEND_PATHS.some((p) => rel.startsWith(p))) return false
+      }
 
       return true
     })
 
     // Patch package.json: set project name
-    patchPackageJson(projectDir, projectName, { includeTrpc })
+    patchPackageJson(projectDir, projectName, { includeTrpc, template })
 
     // Patch layout.tsx if tRPC excluded
-    if (!includeTrpc) {
+    if (template === 'web' && !includeTrpc) {
       patchLayoutWithoutTrpc(projectDir)
     }
 
     // Patch page.tsx if tRPC excluded
-    if (!includeTrpc) {
+    if (template === 'web' && !includeTrpc) {
       patchPageWithoutTrpc(projectDir)
     }
   } catch (err) {
@@ -115,15 +124,17 @@ function copyDirRecursive(
 function patchPackageJson(
   projectDir: string,
   projectName: string,
-  options: { includeTrpc: boolean }
+  options: { includeTrpc: boolean; template: TemplateKind }
 ): void {
   const pkgPath = join(projectDir, 'package.json')
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as {
     name?: string
     dependencies?: Record<string, string>
+    devDependencies?: Record<string, string>
+    optionalDependencies?: Record<string, string>
   }
   pkg['name'] = sanitizeName(projectName)
-  if (!options.includeTrpc && pkg.dependencies) {
+  if (options.template === 'web' && !options.includeTrpc && pkg.dependencies) {
     for (const dependency of [
       '@tanstack/react-query',
       '@trpc/client',
@@ -134,7 +145,32 @@ function patchPackageJson(
       delete pkg.dependencies[dependency]
     }
   }
+
+  if (process.env['PKSTACK_LOCAL_WORKSPACE'] === '1') {
+    rewritePkstackWorkspaceDeps(pkg)
+  }
+
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
+}
+
+function rewritePkstackWorkspaceDeps(
+  pkg: {
+    dependencies?: Record<string, string>
+    devDependencies?: Record<string, string>
+    optionalDependencies?: Record<string, string>
+  }
+) {
+  for (const section of [pkg.dependencies, pkg.devDependencies, pkg.optionalDependencies]) {
+    if (!section) continue
+
+    for (const dependency of Object.keys(section)) {
+      if (!dependency.startsWith('@pkstack/')) continue
+
+      const packageName = dependency.slice('@pkstack/'.length)
+      const packageDir = join(WORKSPACE_ROOT, 'packages', packageName)
+      section[dependency] = `file:${packageDir}`
+    }
+  }
 }
 
 function patchLayoutWithoutTrpc(projectDir: string): void {

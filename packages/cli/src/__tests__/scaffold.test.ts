@@ -28,6 +28,7 @@ describe('scaffold', () => {
     const dir = tempDir('defaults')
     mkdirSync(TMP, { recursive: true })
     scaffold({
+      template: 'web',
       projectName: 'test-app',
       projectDir: dir,
       includeTrpc: true,
@@ -48,6 +49,7 @@ describe('scaffold', () => {
     const dir = tempDir('exact-versions')
     mkdirSync(TMP, { recursive: true })
     scaffold({
+      template: 'web',
       projectName: 'exact-versions',
       projectDir: dir,
       includeTrpc: true,
@@ -77,6 +79,7 @@ describe('scaffold', () => {
     const dir = tempDir('no-trpc')
     mkdirSync(TMP, { recursive: true })
     scaffold({
+      template: 'web',
       projectName: 'test-no-trpc',
       projectDir: dir,
       includeTrpc: false,
@@ -97,6 +100,7 @@ describe('scaffold', () => {
     mkdirSync(dir, { recursive: true })
     expect(() =>
       scaffold({
+        template: 'web',
         projectName: 'dup',
         projectDir: dir,
         includeTrpc: true,
@@ -111,6 +115,7 @@ describe('scaffold', () => {
     mkdirSync(dir, { recursive: true })
     expect(() =>
       scaffold({
+        template: 'web',
         projectName: 'partial-fail',
         projectDir: dir,
         includeTrpc: true,
@@ -118,5 +123,24 @@ describe('scaffold', () => {
         includeResend: false,
       })
     ).toThrow()
+  })
+
+  it('mobile template scaffolds Expo app files', () => {
+    const dir = tempDir('mobile')
+    mkdirSync(TMP, { recursive: true })
+    scaffold({
+      template: 'mobile',
+      projectName: 'mobile-app',
+      projectDir: dir,
+      includeTrpc: false,
+      includeStripe: false,
+      includeResend: false,
+    })
+
+    expect(existsSync(join(dir, 'App.tsx'))).toBe(true)
+    expect(existsSync(join(dir, 'app.json'))).toBe(true)
+
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8')) as { name: string }
+    expect(pkg.name).toBe('mobile-app')
   })
 })

@@ -3,11 +3,12 @@ import { cache } from 'react'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 import { auth } from '@/lib/auth'
+import { getSession } from '@pkstack/auth'
 import { db } from '@/db'
 
 // Context is created once per request, cached with React.cache()
 export const createTRPCContext = cache(async (opts: { headers: Headers }) => {
-  const session = await auth.api.getSession({ headers: opts.headers })
+  const session = await getSession(auth, opts.headers)
   return {
     db,
     session,

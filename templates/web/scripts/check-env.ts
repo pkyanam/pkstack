@@ -2,11 +2,45 @@
 // check-env.ts — runs before npm run dev / npm run build
 // Validates required env vars and prints a clear action for each missing one.
 
+import { existsSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+
 interface EnvCheck {
   key: string
   hint: string
   required: boolean
 }
+
+function loadEnvFile(filename: string) {
+  const filepath = join(process.cwd(), filename)
+  if (!existsSync(filepath)) {
+    return
+  }
+
+  const content = readFileSync(filepath, 'utf8')
+
+  for (const rawLine of content.split('\n')) {
+    const line = rawLine.trim()
+    if (!line || line.startsWith('#')) {
+      continue
+    }
+
+    const separatorIndex = line.indexOf('=')
+    if (separatorIndex === -1) {
+      continue
+    }
+
+    const key = line.slice(0, separatorIndex).trim()
+    const value = line.slice(separatorIndex + 1).trim()
+
+    if (!process.env[key]) {
+      process.env[key] = value
+    }
+  }
+}
+
+loadEnvFile('.env.local')
+loadEnvFile('.env')
 
 const checks: EnvCheck[] = [
   {

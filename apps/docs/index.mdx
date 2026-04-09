@@ -1,0 +1,30 @@
+---
+title: pkstack
+description: Human + AI agent starter kit for TypeScript apps.
+---
+
+# pkstack
+
+`pkstack` is a TypeScript starter kit built for human + AI agent co-development from the start.
+
+## What ships in Stage 2
+
+- Installable `@pkstack/*` runtime workspace packages for UI, auth, db, API contracts, and AI helpers
+- `templates/web` updated to consume those packages instead of carrying inline runtime code
+- `templates/mobile` plus a reference Expo app
+- Mintlify docs that describe the repo as it exists today
+
+## Release state
+
+- `v0.2.0` is implemented in the repo and verified locally.
+- npm publishing for the Stage 2 packages is still pending.
+- The docs hostname is not final yet. A temporary subdomain such as `pkstack.preetham.org` is acceptable.
+
+## Quickstart
+
+```bash
+npm create pkstack my-app
+npm create pkstack my-mobile-app --mobile
+```
+
+The scaffolded apps ship with `AGENTS.md`, `CLAUDE.md`, and the gstack workflow pre-wired.

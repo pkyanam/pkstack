@@ -8,9 +8,11 @@ import { generateEnvFiles } from './env.js'
 import { GSTACK_VERSION } from './constants.js'
 
 const [, , ...args] = process.argv
+const mobileFlag = args.includes('--mobile')
+const positionalArgs = args.filter((arg) => arg !== '--mobile')
 
 // setup-gstack subcommand
-if (args[0] === 'setup-gstack') {
+if (positionalArgs[0] === 'setup-gstack') {
   await runSetupGstack()
   process.exit(0)
 }
@@ -22,8 +24,10 @@ async function runCreate() {
   console.log('')
   intro(' create-pkstack ')
 
+  const template = mobileFlag ? 'mobile' : 'web'
+
   // Project name
-  const rawName = args[0] ?? (await text({
+  const rawName = positionalArgs[0] ?? (await text({
     message: 'What is your project name?',
     placeholder: 'my-app',
     validate(value) {
@@ -42,37 +46,44 @@ async function runCreate() {
     process.exit(1)
   }
 
-  // tRPC
-  const includeTrpc = await confirm({
-    message: 'Include tRPC?',
-    initialValue: true,
-  })
-  if (isCancel(includeTrpc)) { cancel('Cancelled.'); process.exit(0) }
+  let includeTrpc = false
+  let includeStripe = false
+  let includeResend = false
 
-  // Stripe
-  const includeStripe = await confirm({
-    message: 'Include payments (Stripe)?',
-    initialValue: true,
-  })
-  if (isCancel(includeStripe)) { cancel('Cancelled.'); process.exit(0) }
+  if (template === 'web') {
+    const rawIncludeTrpc = await confirm({
+      message: 'Include tRPC?',
+      initialValue: true,
+    })
+    if (isCancel(rawIncludeTrpc)) { cancel('Cancelled.'); process.exit(0) }
+    includeTrpc = Boolean(rawIncludeTrpc)
 
-  // Resend
-  const includeResend = await confirm({
-    message: 'Include email (Resend)?',
-    initialValue: true,
-  })
-  if (isCancel(includeResend)) { cancel('Cancelled.'); process.exit(0) }
+    const rawIncludeStripe = await confirm({
+      message: 'Include payments (Stripe)?',
+      initialValue: true,
+    })
+    if (isCancel(rawIncludeStripe)) { cancel('Cancelled.'); process.exit(0) }
+    includeStripe = Boolean(rawIncludeStripe)
+
+    const rawIncludeResend = await confirm({
+      message: 'Include email (Resend)?',
+      initialValue: true,
+    })
+    if (isCancel(rawIncludeResend)) { cancel('Cancelled.'); process.exit(0) }
+    includeResend = Boolean(rawIncludeResend)
+  }
 
   // Scaffold files
   const s = spinner()
   s.start('Scaffolding files')
   try {
     scaffold({
+      template,
       projectName,
       projectDir,
-      includeTrpc: Boolean(includeTrpc),
-      includeStripe: Boolean(includeStripe),
-      includeResend: Boolean(includeResend),
+      includeTrpc,
+      includeStripe,
+      includeResend,
     })
     s.stop('Files scaffolded')
   } catch (err) {
@@ -82,12 +93,14 @@ async function runCreate() {
   }
 
   // Generate env files
-  generateEnvFiles({
-    projectDir,
-    projectName,
-    includeStripe: Boolean(includeStripe),
-    includeResend: Boolean(includeResend),
-  })
+  if (template === 'web') {
+    generateEnvFiles({
+      projectDir,
+      projectName,
+      includeStripe,
+      includeResend,
+    })
+  }
 
   // Install gstack
   s.start('Installing gstack AI workflow toolchain')
@@ -103,7 +116,9 @@ async function runCreate() {
     printGstackFailureBox(projectName, gstackResult.error ?? 'Unknown error')
   }
 
-  outro(`✓ ${projectName} created successfully!\n
+  outro(
+    template === 'web'
+      ? `✓ ${projectName} created successfully!\n
   Next steps:
     cd ${projectName}
     # .env.local was generated for you
@@ -111,7 +126,14 @@ async function runCreate() {
     docker compose up -d          # start local Postgres (or use Neon free tier)
     npm install
     npm run dev
-  `)
+  `
+      : `✓ ${projectName} created successfully!\n
+  Next steps:
+    cd ${projectName}
+    npm install
+    npm run start
+  `
+  )
 }
 
 async function runSetupGstack() {

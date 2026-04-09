@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// copy-templates.mjs — copies templates/web into packages/cli/templates/web
+// copy-templates.mjs — copies templates/* into packages/cli/templates/*
 // Run after tsc build so the dist/ bundle includes the template files.
 
 import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
@@ -8,11 +8,11 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..', '..', '..')
-const src = join(root, 'templates', 'web')
-const dest = join(__dirname, '..', 'templates', 'web')
+const src = join(root, 'templates')
+const dest = join(__dirname, '..', 'templates')
 
 if (!existsSync(src)) {
-  console.error(`Template source not found: ${src}`)
+  console.error(`Templates source not found: ${src}`)
   process.exit(1)
 }
 
@@ -36,4 +36,4 @@ cpSync(src, dest, {
   },
 })
 
-console.log(`✓ Copied templates/web → packages/cli/templates/web`)
+console.log(`✓ Copied templates/* → packages/cli/templates/*`)

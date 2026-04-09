@@ -1,0 +1,16 @@
+{
+  "name": "docs",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/fix-mint-react.mjs && mint dev",
+    "build": "node scripts/validate-docs.mjs",
+    "lint": "echo 'no lint step for docs app'",
+    "postinstall": "node scripts/fix-mint-react.mjs",
+    "test": "echo 'no tests for docs app'",
+    "typecheck": "echo 'no typecheck step for docs app'"
+  },
+  "devDependencies": {
+    "mint": "4.2.502"
+  }
+}

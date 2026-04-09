@@ -1,0 +1,42 @@
+{
+  "name": "@pkstack/ai",
+  "version": "0.2.0",
+  "description": "Shared AI SDK wrappers and agent helpers for pkstack apps",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src/",
+    "test": "echo 'no tests for @pkstack/ai'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ai": "4.3.19"
+  },
+  "peerDependencies": {
+    "react": "19.2.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@pkstack/config": "0.2.0",
+    "@types/node": "22.19.17",
+    "@types/react": "19.2.14",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.58.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
