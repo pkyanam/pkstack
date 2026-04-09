@@ -1,12 +1,6 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
 import './globals.css'
 import { TRPCProvider } from '@/server/api/provider'
-
-const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist',
-})
 
 export const metadata: Metadata = {
   title: 'My App',
@@ -20,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <TRPCProvider>{children}</TRPCProvider>
       </body>
     </html>

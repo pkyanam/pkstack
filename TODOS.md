@@ -2,21 +2,15 @@
 
 ## v0.1
 
-- [x] **Env validation script** (`scripts/check-env.ts`): runs before `npm run dev`, prints clear action for each missing env var (DATABASE_URL, BETTER_AUTH_SECRET, etc). See `templates/web/scripts/check-env.ts`.
-
-- [x] **gstack version pinning**: `GSTACK_VERSION` constant in `packages/cli/src/constants.ts` pins the gstack release. Update process: PR to bump this constant when gstack releases.
-
-- [x] **CONTRIBUTING.md**: explains how to `./scripts/setup-gstack.sh` after cloning, how `templates/web` is the source of truth, and how to test CLI changes locally with `npm link`.
-
-### Still needed before publish
-
-- [ ] **GitHub repo**: create repo at `pkyanam/pkstack` (or dedicated `pkstack` org — see open question in PRD). Open question must be decided first.
-- [ ] **npm install + template compile check**: run `npm install` in `templates/web` and verify `tsc --noEmit` passes. Some imports (better-auth, drizzle, trpc) may need minor version adjustments.
-- [ ] **shadcn/ui initialization**: run `npx shadcn@latest init` in `templates/web` to generate `components.json` and populate `src/components/ui/`. Currently the template ships no components.
-- [ ] **`tar` import fix in `gstack.ts`**: Node.js built-in `tar` (node:tar) is available in Node 22+; for Node 18/20 compatibility, add `tar` as a dependency or use a polyfill.
-- [ ] **`node:tar` compatibility**: Add `tar` npm package as dependency in `packages/cli` and update the `gstack.ts` import accordingly for Node 18/20 support.
-- [ ] **Turso support in `scaffold.ts`**: the `patchForTurso` function is a placeholder patch; validate it produces a working `drizzle.config.ts` and `src/db/index.ts`.
-- [ ] **CI secrets**: add `NPM_TOKEN` secret to GitHub repo for the publish workflow.
+- [x] **GitHub repo is live** at `pkyanam/pkstack`.
+- [x] **Published packages verified** on npm.
+- [x] **Template verification**: `templates/web` passes `tsc --noEmit` and `next build` with stub env vars.
+- [x] **shadcn/ui baseline exists** in `templates/web/src/components/ui/`.
+- [x] **gstack tar extraction works on Node 18/20/22** via the `tar` package in `packages/cli`.
+- [x] **Env validation + generated env files**: the CLI generates `.env.example` and `.env.local`, and `scripts/check-env.ts` points users at `.env.local`.
+- [x] **Unsupported Turso path removed**: Stage 1 now only advertises the working Postgres/Neon flow.
+- [x] **Curated exact dependency set**: scaffolded apps use pinned package versions, and a fresh generated app now passes `npm install`, `npm run typecheck`, and `npm run build`.
+- [ ] **Confirm `NPM_TOKEN` remains configured** in GitHub Actions for future releases.
 
 ## v0.2
 

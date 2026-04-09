@@ -16,10 +16,10 @@ The `create-pkstack` npm binary. Prompts for project configuration, copies `temp
 
 - `src/constants.ts` — `GSTACK_VERSION` is pinned; change only via a dedicated PR
 - `src/scaffold.ts` cleanup logic — the `try/catch` that calls `rmSync` on partial failure is critical; do not remove it
-- The prompt order (name → database → tRPC → payments → email) is intentional UX — do not reorder without discussion
+- The prompt order (name → tRPC → payments → email) is intentional UX — do not reorder without discussion
 
 ## Common Agent Mistakes
 
-1. **Adding conditional file content to `templates/web/` instead of scaffold.ts** — conditional features (Stripe, Resend, Turso) are stripped/patched by `scaffold.ts`. The template itself should be the "everything on" version; the CLI removes what wasn't selected.
+1. **Adding conditional file content to `templates/web/` instead of scaffold.ts** — conditional features (tRPC, Stripe, Resend) are stripped/patched by `scaffold.ts`. The template itself should be the "everything on" version; the CLI removes what wasn't selected.
 2. **Using `require()` instead of `import`** — the CLI is ESM (`"type": "module"` in package.json). Use `import`, not `require`.
 3. **Not running `npm run build` before testing** — the CLI uses compiled JS from `dist/`. Source changes are not picked up until you rebuild.

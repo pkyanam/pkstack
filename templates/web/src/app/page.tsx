@@ -1,5 +1,7 @@
 import { api } from '@/server/api/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const posts = await api.post.list()
 

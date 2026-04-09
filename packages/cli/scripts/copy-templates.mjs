@@ -3,7 +3,7 @@
 // Run after tsc build so the dist/ bundle includes the template files.
 
 import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
-import { join, dirname } from 'node:path'
+import { join, dirname, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -24,8 +24,15 @@ mkdirSync(dest, { recursive: true })
 cpSync(src, dest, {
   recursive: true,
   filter: (src) => {
-    // Exclude node_modules and .next from the bundled template
-    return !src.includes('node_modules') && !src.includes('.next')
+    const segments = src.split(sep)
+    // Exclude local workspace/build artifacts from the bundled template
+    return !(
+      segments.includes('node_modules') ||
+      segments.includes('.next') ||
+      segments.includes('.git') ||
+      segments.includes('.turbo') ||
+      src.endsWith('/.env.local')
+    )
   },
 })
 

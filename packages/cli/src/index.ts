@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { intro, outro, text, select, confirm, spinner, isCancel, cancel, log } from '@clack/prompts'
+import { intro, outro, text, confirm, spinner, isCancel, cancel, log } from '@clack/prompts'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { scaffold } from './scaffold.js'
@@ -42,16 +42,6 @@ async function runCreate() {
     process.exit(1)
   }
 
-  // Database
-  const database = await select({
-    message: 'Which database?',
-    options: [
-      { value: 'neon', label: 'Neon (Postgres, hosted)', hint: 'default' },
-      { value: 'turso', label: 'Turso (SQLite/edge)' },
-    ],
-  })
-  if (isCancel(database)) { cancel('Cancelled.'); process.exit(0) }
-
   // tRPC
   const includeTrpc = await confirm({
     message: 'Include tRPC?',
@@ -80,8 +70,6 @@ async function runCreate() {
     scaffold({
       projectName,
       projectDir,
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      database: database as 'neon' | 'turso',
       includeTrpc: Boolean(includeTrpc),
       includeStripe: Boolean(includeStripe),
       includeResend: Boolean(includeResend),
@@ -118,7 +106,8 @@ async function runCreate() {
   outro(`✓ ${projectName} created successfully!\n
   Next steps:
     cd ${projectName}
-    cp .env.example .env.local    # fill in your values
+    # .env.local was generated for you
+    $EDITOR .env.local
     docker compose up -d          # start local Postgres (or use Neon free tier)
     npm install
     npm run dev

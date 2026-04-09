@@ -47,8 +47,6 @@ export function generateEnvFiles(opts: EnvOptions): void {
     join(projectDir, '.env.local'),
     content
       .replace('BETTER_AUTH_SECRET=', `BETTER_AUTH_SECRET=${generateSecret()}`)
-      .replace('DATABASE_URL=postgresql://postgres:postgres@localhost:5432/myapp',
-               `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/${dbName}`)
   )
 }
 

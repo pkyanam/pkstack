@@ -31,11 +31,17 @@ Key skills:
 # Install dependencies
 npm install
 
-# Build all packages
-npm run build
-
-# Test the CLI locally
+# Build the published packages
 npm run build -w packages/cli
+
+# Build the template with stub env vars
+cd templates/web
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/testdb \
+BETTER_AUTH_SECRET=test-secret-for-ci-only-not-real \
+BETTER_AUTH_URL=http://localhost:3000 \
+npx next build
+cd ../..
+# Test the CLI locally
 node packages/cli/dist/index.js
 ```
 

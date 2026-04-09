@@ -24,7 +24,7 @@ npm install
 | `packages/cli/` | `create-pkstack` binary. Source of CLI prompts, file generation, gstack install. |
 | `packages/config/` | `@pkstack/config` — shared tsconfig/eslint/tailwind presets. |
 | `templates/web/` | **Source of truth** for what `npm create pkstack` produces. Must always compile and build. |
-| `apps/web/` | Reference app that mirrors `templates/web`. Used for visual dev and dogfooding. |
+| `apps/` | Reserved for later-stage reference apps and docs. Stage 1 ships the published packages plus `templates/web/`. |
 
 ## Key rules
 
@@ -35,10 +35,20 @@ Every change to the scaffold output must be made in `templates/web/`. After edit
 ```bash
 cd templates/web
 npx tsc --noEmit     # must pass
-npx next build       # must pass (with stubbed env vars)
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/testdb \
+BETTER_AUTH_SECRET=test-secret-for-ci-only-not-real \
+BETTER_AUTH_URL=http://localhost:3000 \
+npx next build
 ```
 
 CI will run both checks on every PR.
+
+### Dependency policy
+
+The scaffolded app uses exact dependency versions, not caret ranges and never `"*"`.
+When updating framework or library versions, treat it as a curated compatibility set:
+update the template, rebuild the bundled CLI template, and verify a real generated app
+with `npm install`, `npm run typecheck`, and `npm run build`.
 
 ### Conditional template features
 
@@ -92,8 +102,8 @@ Both must pass before merging.
 Releases are cut from `main` using a semver tag:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 The `publish` CI job publishes `create-pkstack` and `@pkstack/config` to npm automatically.

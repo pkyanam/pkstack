@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Source-of-truth Next.js 15 template for `npm create pkstack`. This is exactly what a scaffolded project looks like. Every change here must pass `tsc --noEmit` and `next build`.
+Source-of-truth Next.js 15 template for `npm create pkstack`. The CLI copies this template, then generates env files and strips optional features. Every change here must pass `tsc --noEmit` and `next build`.
 
 ## Public API
 
@@ -12,10 +12,12 @@ This template is not a published package — it is the scaffold output. The "API
 - **`src/db/auth-schema.ts`** — Better Auth tables (DO NOT EDIT — regenerate from CLI)
 - **`src/db/index.ts`** — exports `db` (Drizzle instance)
 - **`src/lib/auth.ts`** — exports `auth` (Better Auth instance)
+- **`src/lib/email.ts`** — exports `sendTransactionalEmail` (Resend helper, optional scaffold output)
 - **`src/server/api/trpc.ts`** — exports `createTRPCRouter`, `publicProcedure`, `protectedProcedure`
 - **`src/server/api/root.ts`** — exports `appRouter` and `AppRouter` type
 - **`src/server/api/server.ts`** — exports `api` for RSC server-side tRPC calls
 - **`src/server/api/provider.tsx`** — exports `TRPCProvider` and `trpc` client
+- **`src/app/api/webhooks/stripe/route.ts`** — Stripe webhook starter route (optional scaffold output)
 - **`scripts/check-env.ts`** — validates required env vars before dev/build
 
 ## Do Not Modify

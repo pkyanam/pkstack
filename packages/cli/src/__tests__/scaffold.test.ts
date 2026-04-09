@@ -30,7 +30,6 @@ describe('scaffold', () => {
     scaffold({
       projectName: 'test-app',
       projectDir: dir,
-      database: 'neon',
       includeTrpc: true,
       includeStripe: true,
       includeResend: true,
@@ -45,18 +44,52 @@ describe('scaffold', () => {
     expect(pkg.name).toBe('test-app')
   })
 
+  it('pins scaffolded dependency versions exactly', () => {
+    const dir = tempDir('exact-versions')
+    mkdirSync(TMP, { recursive: true })
+    scaffold({
+      projectName: 'exact-versions',
+      projectDir: dir,
+      includeTrpc: true,
+      includeStripe: true,
+      includeResend: true,
+    })
+
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8')) as {
+      dependencies?: Record<string, string>
+      devDependencies?: Record<string, string>
+      optionalDependencies?: Record<string, string>
+    }
+
+    for (const section of [
+      pkg.dependencies ?? {},
+      pkg.devDependencies ?? {},
+      pkg.optionalDependencies ?? {},
+    ]) {
+      for (const version of Object.values(section)) {
+        expect(version).not.toMatch(/^[~^]/)
+        expect(version).not.toBe('*')
+      }
+    }
+  })
+
   it('tRPC excluded → no src/server/ directory', () => {
     const dir = tempDir('no-trpc')
     mkdirSync(TMP, { recursive: true })
     scaffold({
       projectName: 'test-no-trpc',
       projectDir: dir,
-      database: 'neon',
       includeTrpc: false,
       includeStripe: false,
       includeResend: false,
     })
     expect(existsSync(join(dir, 'src/server'))).toBe(false)
+    expect(existsSync(join(dir, 'src/app/api/trpc'))).toBe(false)
+
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8')) as {
+      dependencies: Record<string, string>
+    }
+    expect(pkg.dependencies['@trpc/server']).toBeUndefined()
   })
 
   it('duplicate directory → throws, no overwrite', () => {
@@ -66,7 +99,6 @@ describe('scaffold', () => {
       scaffold({
         projectName: 'dup',
         projectDir: dir,
-        database: 'neon',
         includeTrpc: true,
         includeStripe: false,
         includeResend: false,
@@ -81,7 +113,6 @@ describe('scaffold', () => {
       scaffold({
         projectName: 'partial-fail',
         projectDir: dir,
-        database: 'neon',
         includeTrpc: true,
         includeStripe: false,
         includeResend: false,

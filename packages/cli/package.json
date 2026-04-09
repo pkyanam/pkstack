@@ -1,6 +1,6 @@
 {
   "name": "create-pkstack",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Create an AI-native Next.js app with gstack pre-wired",
   "license": "MIT",
   "type": "module",
@@ -20,18 +20,18 @@
     "lint": "eslint src/"
   },
   "dependencies": {
-    "@clack/prompts": "^0.9.1",
-    "chalk": "^5.4.1",
-    "ora": "^8.2.0",
-    "picocolors": "^1.1.1",
-    "tar": "^7.4.3"
+    "@clack/prompts": "0.9.1",
+    "chalk": "5.6.2",
+    "ora": "8.2.0",
+    "picocolors": "1.1.1",
+    "tar": "7.5.13"
   },
   "devDependencies": {
-    "@pkstack/config": "*",
-    "@types/node": "^22.13.14",
-    "@types/tar": "^6.1.13",
-    "typescript": "^5.8.2",
-    "vitest": "^3.1.1"
+    "@pkstack/config": "0.1.2",
+    "@types/node": "22.19.17",
+    "@types/tar": "6.1.13",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
   },
   "engines": {
     "node": ">=18.18.0"

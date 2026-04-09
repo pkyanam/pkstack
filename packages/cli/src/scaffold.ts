@@ -14,7 +14,6 @@ import { fileURLToPath } from 'node:url'
 export interface ScaffoldOptions {
   projectName: string
   projectDir: string
-  database: 'neon' | 'turso'
   includeTrpc: boolean
   includeStripe: boolean
   includeResend: boolean
@@ -22,9 +21,17 @@ export interface ScaffoldOptions {
 
 const TEMPLATE_DIR = join(fileURLToPath(import.meta.url), '..', '..', 'templates', 'web')
 
+const EXCLUDED_TEMPLATE_SEGMENTS = [
+  `${join('', '.git')}`,
+  `${join('', '.next')}`,
+  `${join('', '.turbo')}`,
+  'node_modules',
+]
+
 // Files/dirs to exclude when tRPC is not selected
 const TRPC_PATHS = [
   'src/server',
+  'src/app/api/trpc',
 ]
 
 // Files to remove when Stripe is not selected
@@ -38,7 +45,7 @@ const RESEND_PATHS = [
 ]
 
 export function scaffold(opts: ScaffoldOptions): void {
-  const { projectName, projectDir, database, includeTrpc, includeStripe, includeResend } = opts
+  const { projectName, projectDir, includeTrpc, includeStripe, includeResend } = opts
 
   if (existsSync(projectDir)) {
     throw new Error(`Directory "${projectDir}" already exists. Choose a different project name.`)
@@ -47,6 +54,12 @@ export function scaffold(opts: ScaffoldOptions): void {
   try {
     copyDirRecursive(TEMPLATE_DIR, projectDir, (srcPath) => {
       const rel = relative(TEMPLATE_DIR, srcPath)
+
+      if (EXCLUDED_TEMPLATE_SEGMENTS.some((segment) => rel === segment || rel.startsWith(`${segment}/`))) {
+        return false
+      }
+
+      if (rel === '.env.local') return false
 
       // Strip tRPC files if not selected
       if (!includeTrpc && TRPC_PATHS.some((p) => rel.startsWith(p))) return false
@@ -61,12 +74,7 @@ export function scaffold(opts: ScaffoldOptions): void {
     })
 
     // Patch package.json: set project name
-    patchPackageJson(projectDir, projectName)
-
-    // Patch next.config.ts if Turso selected
-    if (database === 'turso') {
-      patchForTurso(projectDir)
-    }
+    patchPackageJson(projectDir, projectName, { includeTrpc })
 
     // Patch layout.tsx if tRPC excluded
     if (!includeTrpc) {
@@ -104,31 +112,29 @@ function copyDirRecursive(
   }
 }
 
-function patchPackageJson(projectDir: string, projectName: string): void {
+function patchPackageJson(
+  projectDir: string,
+  projectName: string,
+  options: { includeTrpc: boolean }
+): void {
   const pkgPath = join(projectDir, 'package.json')
-  const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as Record<string, unknown>
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as {
+    name?: string
+    dependencies?: Record<string, string>
+  }
   pkg['name'] = sanitizeName(projectName)
+  if (!options.includeTrpc && pkg.dependencies) {
+    for (const dependency of [
+      '@tanstack/react-query',
+      '@trpc/client',
+      '@trpc/react-query',
+      '@trpc/server',
+      'superjson',
+    ]) {
+      delete pkg.dependencies[dependency]
+    }
+  }
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
-}
-
-function patchForTurso(projectDir: string): void {
-  const drizzlePath = join(projectDir, 'drizzle.config.ts')
-  if (!existsSync(drizzlePath)) return
-  let content = readFileSync(drizzlePath, 'utf8')
-  content = content
-    .replace("dialect: 'postgresql'", "dialect: 'sqlite'")
-    .replace("import postgres from 'postgres'", '')
-    .replace('postgres(connectionString, { prepare: false })', 'createClient({ url: connectionString })')
-  writeFileSync(drizzlePath, content)
-
-  const dbPath = join(projectDir, 'src/db/index.ts')
-  if (!existsSync(dbPath)) return
-  let dbContent = readFileSync(dbPath, 'utf8')
-  dbContent = dbContent
-    .replace("import { drizzle } from 'drizzle-orm/postgres-js'", "import { drizzle } from 'drizzle-orm/libsql'")
-    .replace("import postgres from 'postgres'", "import { createClient } from '@libsql/client'")
-    .replace('const client = postgres(connectionString, { prepare: false })', 'const client = createClient({ url: connectionString })')
-  writeFileSync(dbPath, dbContent)
 }
 
 function patchLayoutWithoutTrpc(projectDir: string): void {

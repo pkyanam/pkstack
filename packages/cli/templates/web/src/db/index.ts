@@ -5,7 +5,7 @@ import * as authSchema from './auth-schema'
 
 const connectionString = process.env['DATABASE_URL']
 if (!connectionString) {
-  throw new Error('DATABASE_URL is not set. Run: cp .env.example .env.local and fill in your values.')
+  throw new Error('DATABASE_URL is not set. Update .env.local with your database connection string.')
 }
 
 // Disable prefetch as it is not supported for "Transaction" pool mode (Neon)

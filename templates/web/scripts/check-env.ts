@@ -47,7 +47,7 @@ box([
     `   ${hint.replace(/\n/g, '\n   ')}`,
     '',
   ]),
-  'Copy .env.example to .env.local and fill in the values above.',
+  'Update .env.local with the values above.',
 ])
 
 process.exit(1)

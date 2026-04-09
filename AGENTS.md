@@ -14,9 +14,9 @@ pkstack/
 ├── templates/
 │   └── web/          # Next.js 15 template — see templates/web/AGENTS.md
 ├── apps/
-│   └── web/          # reference app (mirrors templates/web, not published)
+│   └── ...           # reserved for later-stage reference apps and docs
 ├── scripts/
-│   └── setup-gstack.sh   # gitignored — run after cloning to install gstack
+│   └── setup-gstack.sh   # contributor setup helper for installing gstack
 └── .github/
     └── workflows/    # CI/CD pipelines
 ```
