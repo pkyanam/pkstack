@@ -5,14 +5,14 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./drizzle": {
-      "types": "./src/drizzle.ts",
+      "types": "./dist/drizzle.d.ts",
       "default": "./dist/drizzle.js"
     }
   },
@@ -22,6 +22,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src/",
+    "prepack": "npm run build",
     "test": "echo 'no tests for @pkstack/db'",
     "typecheck": "tsc --noEmit"
   },

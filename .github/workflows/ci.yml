@@ -52,6 +52,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build runtime packages
+        run: npm run build -w packages/ui -w packages/db -w packages/auth -w packages/ai -w packages/api
+
       - name: Typecheck template
         working-directory: templates/web
         run: npx tsc --noEmit
@@ -104,7 +107,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build -w packages/cli
+        run: npm run build -w packages/cli -w packages/ui -w packages/db -w packages/auth -w packages/ai -w packages/api
 
       - name: Publish create-pkstack
         run: npm publish --access public -w packages/cli
@@ -113,5 +116,30 @@ jobs:
 
       - name: Publish @pkstack/config
         run: npm publish --access public -w packages/config
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @pkstack/ui
+        run: npm publish --access public -w packages/ui
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @pkstack/db
+        run: npm publish --access public -w packages/db
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @pkstack/auth
+        run: npm publish --access public -w packages/auth
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @pkstack/ai
+        run: npm publish --access public -w packages/ai
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @pkstack/api
+        run: npm publish --access public -w packages/api
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
