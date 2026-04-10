@@ -17,11 +17,12 @@ npm create pkstack my-mobile-app --mobile
 
 ## Current state
 
-pkstack is at `v0.2.1`.
+pkstack is at `v0.2.2`.
 
-- `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages are now published.
+- `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages are published.
 - The web template, mobile template, CLI, reference apps, and package extraction work are done.
-- The next step is publishing the docs site through Mintlify at `pkstack.preetham.org`.
+- The docs site is live through Mintlify at `pkstack.preetham.org`.
+- The next package follow-up is shipping the published web scaffold type fix in `v0.2.2`.
 
 ## What pkstack gives you
 
@@ -184,7 +185,7 @@ Current status:
 
 - local Mint preview works
 - package publishing is done
-- public docs deployment is the next task
+- public docs deployment is live at `pkstack.preetham.org`
 
 Target:
 

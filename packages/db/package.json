@@ -1,6 +1,6 @@
 {
   "name": "@pkstack/db",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Shared Drizzle database helpers for pkstack apps",
   "license": "MIT",
   "type": "module",
@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
-    "@pkstack/config": "0.2.1",
+    "@pkstack/config": "0.2.2",
     "@types/node": "22.19.17",
     "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",

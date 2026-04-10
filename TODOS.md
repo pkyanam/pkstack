@@ -13,9 +13,11 @@
 
 ## Next step
 
-- [ ] Publish the docs site through Mintlify
-- [ ] Point `pkstack.preetham.org` at the deployed docs site
-- [ ] Smoke-test the published npm flow from a clean external directory
+- [x] Publish the docs site through Mintlify
+- [x] Point `pkstack.preetham.org` at the deployed docs site
+- [x] Smoke-test the published mobile npm flow from a clean external directory
+- [ ] Publish the web scaffold type fix in `v0.2.2`
+- [ ] Re-run the published web npm smoke test after `v0.2.2` is live
 
 ## Follow-up cleanup
 

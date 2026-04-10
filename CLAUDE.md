@@ -8,8 +8,9 @@ The repo has one job: produce and maintain a coherent scaffold pipeline from sha
 
 Current state:
 
-- `v0.2.1` packages and CLI are published
-- the next product step is deploying the docs site through Mintlify at `pkstack.preetham.org`
+- `v0.2.2` packages and CLI are being prepared for release
+- docs are live through Mintlify at `pkstack.preetham.org`
+- the immediate release task is shipping the published web scaffold fix in `v0.2.2`
 
 Read `AGENTS.md` first for ownership and repo shape.
 
@@ -89,4 +90,4 @@ CI=1 npx expo prebuild --no-install
 - docs must distinguish source-of-truth templates from bundled template copies
 - docs must distinguish published packages from app-owned code
 - docs must state what is shipped versus what is merely planned
-- the current planned deployment target for docs is Mintlify with the custom domain `pkstack.preetham.org`
+- the docs are deployed through Mintlify at `pkstack.preetham.org`

@@ -37,6 +37,8 @@ export function createAuth({
 
 type AuthInstance = ReturnType<typeof createAuth>
 
+export type Auth = AuthInstance
+
 export async function getSession(auth: AuthInstance, headers: Headers) {
   return auth.api.getSession({ headers })
 }

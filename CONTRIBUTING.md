@@ -136,8 +136,8 @@ The repo docs should explain pkstack end to end:
 
 Current planned platform step:
 
-- deploy the docs site through Mintlify
-- use `pkstack.preetham.org` as the initial custom domain
+- keep the docs site in sync with the live Mintlify deployment at `pkstack.preetham.org`
+- smoke-test the published npm flow after each tagged release
 
 ## Release flow
 

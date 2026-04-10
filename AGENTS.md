@@ -14,8 +14,9 @@ The repo owns four things:
 The current product state is:
 
 - packages are published to npm
-- templates and CLI are shipping `v0.2.1`
-- the next delivery step is a public Mintlify-hosted docs website at `pkstack.preetham.org`
+- templates and CLI are being prepared for `v0.2.2`
+- the public docs website is live at `pkstack.preetham.org`
+- the next release step is shipping the published web scaffold smoke-test fix in `v0.2.2`
 
 ## Public API
 

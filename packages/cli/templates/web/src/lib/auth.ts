@@ -1,7 +1,7 @@
 import { db } from '../db'
-import { createAuth } from '@pkstack/auth'
+import { createAuth, type Auth } from '@pkstack/auth'
 
-export const auth = createAuth({
+export const auth: Auth = createAuth({
   db,
 })
 

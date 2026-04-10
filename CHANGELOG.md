@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2.2
+
+Release-prep update with:
+
+- explicit `Auth` type export in `@pkstack/auth`
+- scaffolded web auth wiring annotated to avoid a non-portable inferred Better Auth type
+- docs/status updated to reflect the live Mintlify site at `pkstack.preetham.org`
+- smoke-test notes captured: published mobile flow passed, published web flow needs the `v0.2.2` fix
+
 ## v0.2.1
 
 Documentation and release-alignment update with:
@@ -22,4 +31,4 @@ Published release with:
 Post-release status:
 
 - npm publishing is complete
-- the remaining public launch step is docs deployment through Mintlify at `pkstack.preetham.org`
+- docs are live through Mintlify at `pkstack.preetham.org`

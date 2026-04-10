@@ -1,6 +1,6 @@
 # Docs Deployment Handoff Prompt
 
-You are taking over pkstack after the `v0.2.1` release.
+You are taking over pkstack after the `v0.2.2` release prep.
 
 Read these first:
 
@@ -13,7 +13,7 @@ Read these first:
 
 ## Current State
 
-The CLI and packages are published.
+The CLI and packages are published, and the docs site is live.
 
 What is done:
 
@@ -24,13 +24,9 @@ What is done:
 - reference mobile app
 - Mintlify docs content in `apps/docs`
 
-## Next Product Step
+## Current Focus
 
-Publish the docs website through Mintlify and point:
-
-- `pkstack.preetham.org`
-
-at that deployed site.
+The immediate task after this handoff is validating the republished web scaffold once `v0.2.2` is live.
 
 ## Constraints
 
@@ -44,5 +40,5 @@ at that deployed site.
 When you finish, the public docs story should be coherent:
 
 - packages already published
-- docs hosted publicly
+- docs hosted publicly at `pkstack.preetham.org`
 - root docs and Mintlify docs agree on the deployment path
