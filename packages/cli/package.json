@@ -1,6 +1,6 @@
 {
   "name": "create-pkstack",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Create an AI-native Next.js app with gstack pre-wired",
   "license": "MIT",
   "type": "module",
@@ -27,7 +27,7 @@
     "tar": "7.5.13"
   },
   "devDependencies": {
-    "@pkstack/config": "0.2.2",
+    "@pkstack/config": "0.2.3",
     "@types/node": "22.19.17",
     "@types/tar": "6.1.13",
     "typescript": "5.9.3",

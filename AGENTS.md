@@ -13,10 +13,10 @@ The repo owns four things:
 
 The current product state is:
 
-- packages are published to npm
-- templates and CLI are being prepared for `v0.2.2`
-- the public docs website is live at `pkstack.preetham.org`
-- the next release step is shipping the published web scaffold smoke-test fix in `v0.2.2`
+- packages and CLI are published on npm on the **v0.2.x** line (verify the registry for the latest tag)
+- source templates and `create-pkstack` in this repo track the same semver in `package.json` files
+- public docs are live at **pkstack.preetham.org** (Mintlify)
+- default validation: `npm test` (Turbo unit tests) plus **`npm run smoke`** for CI-parity without Playwright; GitHub Actions does not run Playwright today
 
 ## Public API
 

@@ -1,5 +1,7 @@
 # Docs Deployment Handoff Prompt
 
+**Note (2026-04-25):** For **ongoing polish and feature work**, use [feature-polish-handoff.md](./feature-polish-handoff.md) first. This file remains useful for the original Mintlify / v0.2.2 validation context.
+
 You are taking over pkstack after the `v0.2.2` release prep.
 
 Read these first:

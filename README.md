@@ -17,12 +17,12 @@ npm create pkstack my-mobile-app --mobile
 
 ## Current state
 
-pkstack is at `v0.2.2`.
+pkstack is at `v0.2.3`.
 
-- `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages are published.
+- `create-pkstack`, `@pkstack/config`, and the Stage 2 `@pkstack/*` runtime packages are published on the same semver line.
 - The web template, mobile template, CLI, reference apps, and package extraction work are done.
 - The docs site is live through Mintlify at `pkstack.preetham.org`.
-- The next package follow-up is shipping the published web scaffold type fix in `v0.2.2`.
+- Contributor validation includes **`npm run smoke`** (CI-parity without Playwright); see `CONTRIBUTING.md` and `CHANGELOG.md`.
 
 ## What pkstack gives you
 
@@ -146,7 +146,10 @@ npm run build
 npm run lint
 npm run typecheck
 npm test
+npm run smoke
 ```
+
+`npm run smoke` mirrors the important CI checks (CLI, runtime packages, web template `next build`, mobile template typecheck) without Playwright. Use `npm run test:e2e` or `npm run test:all` only when you explicitly want browser-based scaffold tests.
 
 ### Work on the CLI locally
 
@@ -198,4 +201,5 @@ Target:
 - [CLAUDE.md](./CLAUDE.md)
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
 - [CHANGELOG.md](./CHANGELOG.md)
-- [prompts/stage-2-handoff.md](./prompts/stage-2-handoff.md)
+- [prompts/feature-polish-handoff.md](./prompts/feature-polish-handoff.md) — active handoff for polish / QoL work
+- [prompts/stage-2-handoff.md](./prompts/stage-2-handoff.md) — earlier docs / release-validation context (through v0.2.2)

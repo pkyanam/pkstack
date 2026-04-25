@@ -11,7 +11,7 @@ This app explains the system end to end:
 - how a generated app relates to the monorepo
 - what the next deployment step is for the public docs site
 
-The next external step for this app is Mintlify deployment at `pkstack.preetham.org`.
+Public docs are deployed through Mintlify at `pkstack.preetham.org`; keep content aligned with root `README.md` / `CHANGELOG.md`.
 
 ## Public API
 
@@ -33,5 +33,5 @@ The next external step for this app is Mintlify deployment at `pkstack.preetham.
 ## Common Agent Mistakes
 
 1. **Writing docs from one directory’s perspective only** — this app should explain the full package -> template -> CLI -> generated-app flow.
-2. **Claiming production docs deployment is already done** — the target is Mintlify at `pkstack.preetham.org`, but deployment wiring is still the next task.
+2. **Contradicting the live deployment story** — production docs are Mintlify at `pkstack.preetham.org`; do not describe Vercel as the docs host unless that changes in `deployment.mdx` and root docs.
 3. **Documenting reference apps as scaffold sources** — `apps/*` are references; `templates/*` are the scaffold source of truth.

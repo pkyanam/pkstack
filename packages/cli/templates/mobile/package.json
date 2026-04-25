@@ -1,6 +1,6 @@
 {
   "name": "mobile",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -14,8 +14,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@pkstack/ai": "0.2.2",
-    "@pkstack/api": "0.2.2",
+    "@pkstack/ai": "0.2.3",
+    "@pkstack/api": "0.2.3",
     "expo": "55.0.12",
     "react": "19.2.5",
     "react-dom": "19.2.5",

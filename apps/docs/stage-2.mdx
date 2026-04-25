@@ -33,9 +33,6 @@ After `v0.2.0`:
 
 ## What is next
 
-The next release step is not another architecture change.
+Ship-side validation when you tag releases: confirm **`npm create pkstack`** from a clean directory against the **npm** semver you intend.
 
-It is release validation:
-
-- ship the web scaffold type fix in `v0.2.2`
-- re-run the published web smoke test after that release is live
+In-repo day-to-day: use **`npm run smoke`** (see root `CONTRIBUTING.md`) for CI-parity checks. GitHub Actions does not run Playwright; browser scaffold tests are optional via `npm run test:e2e` / `npm run test:all`.

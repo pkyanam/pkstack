@@ -8,9 +8,9 @@ The repo has one job: produce and maintain a coherent scaffold pipeline from sha
 
 Current state:
 
-- `v0.2.2` packages and CLI are being prepared for release
+- **v0.2.x** — published npm packages and in-repo semver should stay aligned; see `CHANGELOG.md` and tags
 - docs are live through Mintlify at `pkstack.preetham.org`
-- the immediate release task is shipping the published web scaffold fix in `v0.2.2`
+- after substantive changes, prefer **`npm run smoke`** (shell script mirroring core CI steps) over Playwright for agent-side verification
 
 Read `AGENTS.md` first for ownership and repo shape.
 
@@ -52,6 +52,7 @@ npm run build
 npm run lint
 npm run typecheck
 npm test
+npm run smoke
 
 # build the CLI
 npm run build -w packages/cli

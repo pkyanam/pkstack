@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2.3
+
+Monorepo and publish surface aligned at **0.2.3**:
+
+- Documentation: PRD stages aligned with shipped v0.2.x; Mintlify docs paths corrected; contributor validation documents **`npm run smoke`** vs Playwright
+- Tooling: root **`npm test`** is Turbo-only; **`npm run test:all`** runs Turbo + Playwright; **`npm run smoke`** runs `scripts/smoke-local.sh` for CI-parity checks without a browser (web `next build` + mobile `tsc` only; no in-tree `expo prebuild`)
+- Handoff: [prompts/feature-polish-handoff.md](prompts/feature-polish-handoff.md) for ongoing polish / QoL work
+- **`TEMPLATE_VERSION`** and every workspace **`package.json`** / template **`app.json`** version and `@pkstack/*` pin updated to **0.2.3**
+
 ## v0.2.2
 
 Release-prep update with:

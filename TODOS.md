@@ -16,8 +16,14 @@
 - [x] Publish the docs site through Mintlify
 - [x] Point `pkstack.preetham.org` at the deployed docs site
 - [x] Smoke-test the published mobile npm flow from a clean external directory
-- [ ] Publish the web scaffold type fix in `v0.2.2`
-- [ ] Re-run the published web npm smoke test after `v0.2.2` is live
+- [x] In-repo **v0.2.3** semver alignment (confirm npm registry after each tag matches published tarballs)
+- [ ] Re-run the published **web** npm smoke test from a clean directory when you cut the next tag (human or scripted outside agent Playwright)
+
+## Polish / QoL (current focus)
+
+- [ ] Use **`npm run smoke`** after changes that touch CLI, templates, or `@pkstack/*` builds (CI-parity; no Playwright)
+- [ ] Optionally add a GitHub Actions job for `npm run smoke` or `npm run test:e2e` if you want CI to cover browser scaffold tests
+- [ ] Keep root + `apps/docs` wording aligned on Mintlify vs any legacy “Vercel docs” phrasing
 
 ## Follow-up cleanup
 

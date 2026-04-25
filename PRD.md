@@ -2,7 +2,7 @@
 
 **Author:** Preetham Kyanam  
 **Status:** ACTIVE  
-**Last updated:** 2026-04-08  
+**Last updated:** 2026-04-25  
 **Design doc:** `~/.gstack/projects/pkstack/preetham-unknown-design-20260408-164154.md`  
 **Eng review:** `~/.gstack/projects/pkstack/preetham-unknown-eng-review-test-plan-20260408-170446.md`
 
@@ -133,20 +133,22 @@ export const buttonVariants = {
 
 ## Development Stages
 
-### Stage 0 — Foundation (current)
+### Stage 0 — Foundation
 - [x] Design doc (office-hours session)
 - [x] Eng review (plan-eng-review session)
 - [x] GitHub repo created
-- [ ] PRD approved
+- [x] PRD maintained as living spec (this file)
 
-### Stage 1 — v0.1: `npm create pkstack` works
+### Stage 1 — v0.1: `npm create pkstack` works *(shipped)*
 *Goal: a developer can run one command and get a working AI-native Next.js app
 with gstack pre-wired.*
 
-### Stage 2 — v0.2: `@pkstack/*` packages published
+### Stage 2 — v0.2: `@pkstack/*` packages published *(shipped in repo; track npm tags separately)*
 *Goal: the conventions extracted as installable packages; mobile support; docs site.*
 
-### Stage 3 — v0.3: ecosystem
+Current focus in-repo: **polish and QoL** — keep scaffold, packages, CI, and docs aligned; use `npm run smoke` (see `CONTRIBUTING.md`) for CI-parity checks without Playwright in the default loop.
+
+### Stage 3 — v0.3: ecosystem *(not started)*
 *Goal: community templates, plugin system, design consultation.*
 
 ---

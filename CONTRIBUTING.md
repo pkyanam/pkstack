@@ -36,7 +36,7 @@ npm install
 | `templates/web/` | source-of-truth Next.js scaffold |
 | `templates/mobile/` | source-of-truth Expo scaffold |
 | `apps/mobile/` | reference Expo app |
-| `apps/docs/` | Mintlify docs content that will be deployed to Vercel |
+| `apps/docs/` | Mintlify docs content (hosted on Mintlify; custom domain `pkstack.preetham.org`) |
 
 ## The rule that matters most
 
@@ -67,6 +67,16 @@ npm run lint
 npm run typecheck
 npm test
 ```
+
+`npm test` runs **workspace unit tests only** (Turbo), matching what most packages define. For **CI-parity checks without Playwright** (CLI + runtime builds + `templates/web` + `templates/mobile`), run:
+
+```bash
+npm run smoke
+```
+
+Playwright scaffold tests are optional: `npm run test:e2e`, or `npm run test:all` for Turbo tests plus Playwright. They are **not** run in GitHub Actions today; use them locally or in a dedicated CI job if you add one.
+
+`npm run smoke` runs **`templates/mobile` typecheck only** (not `expo prebuild`, which rewrites tracked files). For a full native prebuild check, use the **Mobile template checks** section below.
 
 ### 3. Validate the actual generated output
 
